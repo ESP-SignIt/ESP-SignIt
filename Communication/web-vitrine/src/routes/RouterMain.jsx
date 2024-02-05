@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import Navbar from "./Navbar";
 import Team from "../components/Team";
+import Home from "../components/Home";
 import theme from "../theme";
 
 export default function RouterMain() {
@@ -14,7 +15,7 @@ export default function RouterMain() {
             <BrowserRouter basename="/">
                 <Routes>
                     <Route path="/" element={<Navbar />}>
-                        <Route index element={<div>Home</div>} />
+                        <Route index element={<Home />} />
                         <Route path="/team" element={<Team />} />
                     </Route>
                 </Routes>

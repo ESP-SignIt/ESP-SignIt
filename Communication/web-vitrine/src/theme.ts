@@ -11,6 +11,10 @@ const theme = createTheme({
       light: "#FFFFFF",
       contrastText: "#000000", // Assurez-vous que le texte sur le fond gris clair est lisible
     },
+    info: {
+      main: "#FFFFFF",
+      contrastText: "#FFA500"
+    }
   },
 });
 

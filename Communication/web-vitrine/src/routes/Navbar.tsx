@@ -23,17 +23,17 @@ export default function Navbar({}: Props) {
                 </span>
               </Grid>
               <Grid item>
-                <span style={linkStyles} onClick={() => navigate("/")}>
+                <span style={linkStyles} onClick={() => navigate("/project")}>
                   Notre projet
                 </span>
               </Grid>
               <Grid item>
-                <span style={linkStyles} onClick={() => navigate("/")}>
+                <span style={linkStyles} onClick={() => navigate("/team")}>
                   Notre équipe
                 </span>
               </Grid>
               <Grid item>
-                <span style={linkStyles} onClick={() => navigate("/")}>
+                <span style={linkStyles} onClick={() => navigate("/zebi")}>
                   SignIt
                 </span>
               </Grid>

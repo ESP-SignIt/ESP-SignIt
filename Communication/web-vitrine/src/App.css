@@ -3,16 +3,38 @@
   font-family: 'Nunito', sans-serif !important;
 }
 
-.homepage-pic {
-  width: 50% !important;
-  object-fit: contain;
-  overflow: hidden !important;
+.main-title {
+  font-size: 32px;
+  text-transform: uppercase;
+  font-weight: 900 !important;
+}
+
+.secondary-title {
+  font-size: 18px !important;
+}
+
+.primary {
+  color: #FFA500;
+}
+
+.secondary {
+  color: grey;
+}
+
+.ternary {
+  color: black;
+}
+
+img.homepage-pic {
+  object-fit: contain !important;
   border-radius: 10px 0 0 10px;
 }
 
-
 .box {
   background-color: #D3D3D3;
-  border-radius: 10px;
   box-shadow: 0 10px 20px rgb(10 10 10 / 10%), 0 0 0 0px rgb(10 10 10 / 10%);
+}
+
+.hover-img:hover {
+  cursor: pointer;
 }
