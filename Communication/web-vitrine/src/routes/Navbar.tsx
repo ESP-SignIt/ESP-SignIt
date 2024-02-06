@@ -19,21 +19,6 @@ export default function Navbar({}: Props) {
             <Grid container direction="row" justifyContent={"space-evenly"} alignItems={"center"}>
               <Grid item>
                 <span style={linkStyles} onClick={() => navigate("/")}>
-                  Accueil
-                </span>
-              </Grid>
-              <Grid item>
-                <span style={linkStyles} onClick={() => navigate("/project")}>
-                  Notre projet
-                </span>
-              </Grid>
-              <Grid item>
-                <span style={linkStyles} onClick={() => navigate("/team")}>
-                  Notre équipe
-                </span>
-              </Grid>
-              <Grid item>
-                <span style={linkStyles} onClick={() => navigate("/zebi")}>
                   SignIt
                 </span>
               </Grid>
