@@ -1,0 +1,19 @@
+Index de la tâche,Intitulé de la tâche,Status,Taille de la tâche,Priorité,Temps estimé (en journée),Temps réel (en journée),Date de résolution
+#31,Réalisation du PBS,Done,XS,P0,1,1,2024-01-02
+#32,Phase de recrutement,Done,XS,P0,2,2,2024-01-02
+#33,Expliquer le sujet,Done,XS,P0,1,1,2024-01-02
+#34,Charte Informatique,Done,XS,P0,3,3,2024-03-11
+#35,Plan de communication,Done,M,P0,2,2,2024-03-11
+#46,Mise en corrélation Etat de l'art,Done,L,P0,6,6,2024-03-20
+#45,Fiche de poste,Done,M,P0,4,4,2024-03-13
+#44,Liste des tâches,Done,XL,P0,8,8,2024-05-20
+#43,Wiki github,Done,S,P0,2,2,2024-04-02
+#42,Surveillance des risques,Done,M,P0,4,4,2024-05-01
+#41,Onboarding kit,Done,M,P0,4,4,2024-04-28
+#40,Mise en place du système Kanban,Done,XL,P0,4,4,2024-04-01
+#39,Réalisation du Gantt,Done,M,P0,4,4,2024-03-31
+#37,PAQ V1,Done,M,P0,4,4,2024-04-01
+#38,PAQ V2,Done,M,P0,4,5,2024-06-10
+#48,Squelette documentation du dataset des vidéos,Done,M,P1,4,4,2024-05-13
+#36,Etat de l'art,Done,L,P2,8,8,2024-03-04
+#26,Comprendre et expliciter le fonctionnement des données livrées MediaPipe,In Review,None,None,0,0,2024-01-01
