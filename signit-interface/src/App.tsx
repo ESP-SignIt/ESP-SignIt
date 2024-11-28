@@ -1,32 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
 
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import { ThemeProvider, useTheme } from './ThemeContext';
 
+// Import dynamique des pages
+const TraductionComponent = lazy(() => import('./components/Traduction'));
+const DictionaryComponent = lazy(() => import('./components/Dictionary'));
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <Router>
+        <Navbar />
+        <div>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<TraductionComponent />} />
+              <Route path="/dictionary" element={<DictionaryComponent />} />
+            </Routes>
+          </Suspense>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
