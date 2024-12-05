@@ -6,17 +6,19 @@
 }
 
 .signlang_webcam {
-  width: 600px;
-  height: 500px;
+  border-radius: 20px;
+  width: 640px;
+  height: 480px;
   z-index: 99;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .signlang_canvas {
   position: absolute;
   left: 0;
   top: 0;
-  width: 600px;
-  height: 500px;
+  width: 640px;
+  height: 480px;
   z-index: 999;
 }
 
@@ -43,22 +45,17 @@
   border: none;
   outline: none;
   background-color: var(--color-subtext);
-  color:black;
+  color: black;
   font-family: var(--font-family);
   border-radius: 8px;
 }
 
-.signlang_data-container p {
+.signlang_data p {
   font-size: 20px;
   margin: 1rem;
   width: 20%;
   display: flex;
   justify-content: flex-start;
-}
-
-.gesture_output {
-  color: var(--color-subtext);
-  width: 100%;
 }
 
 .signlang_imagelist-container h2 {
@@ -78,7 +75,6 @@
   align-items: center;
   padding: 1rem;
 }
-
 
 .signlang_image-div img {
   width: 400px;
@@ -101,8 +97,7 @@
   line-height: 2;
 }
 
-
-.signlang_detection_notLoggedIn{
+.signlang_detection_notLoggedIn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -110,12 +105,12 @@
   margin: 2rem;
 }
 
-.signlang_detection_notLoggedIn h1{
+.signlang_detection_notLoggedIn h1 {
   letter-spacing: 5px;
   font-weight: 800;
 }
 
-.signlang_detection_notLoggedIn p{
+.signlang_detection_notLoggedIn p {
   color: #fff;
   font-size: 1rem;
   text-align: center;
@@ -124,7 +119,7 @@
   font-weight: bold;
 }
 
-.signlang_detection_notLoggedIn img{
+.signlang_detection_notLoggedIn img {
   width: 600px;
   height: 400px;
   object-fit: contain;
@@ -134,8 +129,10 @@
 
 @media screen and (max-width: 1080px) {
   .signlang_webcam {
+    border-radius: 20px;
     width: 550px;
     height: 500px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .signlang_canvas {
@@ -162,58 +159,131 @@
     flex-direction: column;
   }
 
-  .signlang_detection_notLoggedIn img{
+  .signlang_detection_notLoggedIn img {
     width: 500px;
     height: 300px;
   }
 }
 
 @media screen and (max-width: 550px) {
-
-    .signlang_webcam {
-        width: 100%;
-        height: fit-content;
-    }
-      
-    .signlang_canvas {
-        width: 100%;
-        height: fit-content;
-    }
-
-    .signlang_image-div {
-        width: fit-content;
-        height: 300px;
-    }
-
-    .signlang_image-div img {
-        width: 200px;
-        height: 150px;
-    }
-
-    .signlang_imagelist-container h3 {
-      text-align: center;
-    }
-
-    .signlang_data-container .signlang_data {
-      padding: 0 0.5rem;
-    }
-
-    .signlang_data-container p {
-      font-size: 18px;
-      width: 30%;
-    }
-
-    .signlang_detection_notLoggedIn img{
-      width: 300px;
-      height: 300px;
-      margin: 0;
-    }
-
-    .signlang_detection_notLoggedIn p{
-      font-size: 0.8rem;
-      width: 100%;
-    }
-    
-
+  .signlang_webcam {
+    width: 100%;
+    height: fit-content;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
+  .signlang_canvas {
+    width: 100%;
+    height: fit-content;
+  }
+
+  .signlang_image-div {
+    width: fit-content;
+    height: 300px;
+  }
+
+  .signlang_image-div img {
+    width: 200px;
+    height: 150px;
+  }
+
+  .signlang_imagelist-container h3 {
+    text-align: center;
+  }
+
+  .signlang_data-container .signlang_data {
+    padding: 0 0.5rem;
+  }
+
+  .signlang_data-container p {
+    font-size: 18px;
+    width: 30%;
+  }
+
+  .signlang_detection_notLoggedIn img {
+    width: 300px;
+    height: 300px;
+    margin: 0;
+  }
+
+  .signlang_detection_notLoggedIn p {
+    font-size: 0.8rem;
+    width: 100%;
+  }
+}
+
+.camera-button-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.camera-button-container button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 5px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.camera-button-container button:hover {
+  background-color: #45a049;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin: 0 10px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

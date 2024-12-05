@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
-import { HAND_CONNECTIONS } from "@mediapipe/hands";
-import { FilesetResolver, GestureRecognizer } from "@mediapipe/tasks-vision";
+import {
+  DrawingUtils,
+  FilesetResolver,
+  GestureRecognizer,
+} from "@mediapipe/tasks-vision";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import "./Traduction.css";
-
 
 import Webcam from "react-webcam";
 import ProgressBar from "./ProgressBar/ProgressBar.jsx";
@@ -19,6 +21,7 @@ const Traduction = () => {
   const [gestureRecognizer, setGestureRecognizer] = useState<any>();
   const [runningMode, setRunningMode] = useState<any>("IMAGE");
   const [progress, setProgress] = useState<any>();
+  const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
 
   const requestRef = useRef<any>();
 
@@ -26,30 +29,6 @@ const Traduction = () => {
 
   const [currentImage, setCurrentImage] = useState<any>(null);
 
-  const drawCustomLandmarks = (ctx: CanvasRenderingContext2D, landmarks: any[], { color = "#FF0000", size = 5 }: any) => {
-    landmarks.forEach((landmark: { x: number; y: number; }) => {
-      ctx.beginPath();
-      canvasRef.current && ctx.arc(landmark.x * canvasRef.current.width, landmark.y * canvasRef.current.height, size, 0, 2 * Math.PI);
-      ctx.fillStyle = color;
-      ctx.fill();
-    });
-    };
-    const drawCustomConnectors = (ctx: CanvasRenderingContext2D, landmarks: { [x: string]: any; }, connections: [any, any][], { color = "#00FF00", lineWidth = 2 }: any) => {
-        connections.forEach(([start, end]) => {
-        const startLandmark = landmarks[start];
-        const endLandmark = landmarks[end];
-    
-        if (startLandmark && endLandmark) {
-            ctx.beginPath();
-            canvasRef.current && ctx.moveTo(startLandmark.x * canvasRef.current.width, startLandmark.y * canvasRef.current.height);
-            canvasRef.current && ctx.lineTo(endLandmark.x * canvasRef.current.width, endLandmark.y * canvasRef.current.height);
-            ctx.strokeStyle = color;
-            ctx.lineWidth = lineWidth;
-            ctx.stroke();
-        }
-    });
-  };
- 
   const predictWebcam = useCallback(() => {
     if (runningMode === "IMAGE") {
       setRunningMode("VIDEO");
@@ -64,16 +43,18 @@ const Traduction = () => {
 
     const canvasCtx = canvasRef.current && canvasRef.current.getContext("2d");
     if (!canvasCtx) {
-        console.error("Le contexte du canvas est introuvable.");
-        return;
-      }
+      console.error("Le contexte du canvas est introuvable.");
+      return;
+    }
     canvasCtx.save();
-    canvasRef.current && canvasCtx.clearRect(
-      0,
-      0,
-      canvasRef.current.width,
-      canvasRef.current.height
-    ); 
+    canvasRef.current &&
+      canvasCtx.clearRect(
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height
+      );
+
     const videoWidth = webcamRef.current.video.videoWidth;
     const videoHeight = webcamRef.current.video.videoHeight;
 
@@ -81,41 +62,36 @@ const Traduction = () => {
     webcamRef.current.video.width = videoWidth;
     webcamRef.current.video.height = videoHeight;
 
+    const drawingUtils = new DrawingUtils(canvasCtx);
     // Set canvas height and width
-    if(canvasRef.current){
-    canvasRef.current.width = videoWidth;
-    canvasRef.current.height = videoHeight;
-}
-    // Draw the results on the canvas, if any.
-    if (results.landmarks) {
-        console.log("Landmarks détectés :", results.landmarks);
-        console.log(canvasCtx)
-      
-        drawCustomConnectors(canvasCtx, results.landmarks, HAND_CONNECTIONS, {
-          color: "#00FF00",
-          lineWidth: 5,
-        });
+    if (canvasRef.current) {
+      console.log("Height" + videoHeight);
+      console.log("Width" + videoWidth);
 
-        drawCustomLandmarks(canvasCtx, results.landmarks, { color: "black", lineWidth: 2 });
-
-        // // Define the text and styling
-        // const text = "Salut";
-        // const fontSize = 24;
-        // const fontColor = "black";
-
-        // // Position where you want to draw the text
-        // const xPosition = 10;
-        // const yPosition = 50;
-
-        // // Draw the text
-        // canvasCtx.font = `${fontSize}px Arial`;
-        // canvasCtx.fillStyle = fontColor;
-        // canvasCtx.fillText(text, xPosition, yPosition);
-
-      
+      canvasRef.current.width = videoWidth;
+      canvasRef.current.height = videoHeight;
     }
+
+    if (results.landmarks && showLandmarks) {
+      for (const landmarks of results.landmarks) {
+        drawingUtils.drawConnectors(
+          landmarks,
+          GestureRecognizer.HAND_CONNECTIONS,
+          {
+            color: "#00FF00",
+            lineWidth: 1,
+          }
+        );
+        drawingUtils.drawLandmarks(landmarks, {
+          color: "#FF0000",
+          lineWidth: 1,
+        });
+      }
+    }
+
+    console.log(results.gestures.length);
     if (results.gestures.length > 0) {
-      setDetectedData((prevData : any) => [
+      setDetectedData((prevData: any) => [
         ...prevData,
         {
           SignDetected: results.gestures[0][0].categoryName,
@@ -123,7 +99,7 @@ const Traduction = () => {
       ]);
 
       setGestureOutput(results.gestures[0][0].categoryName);
-      setProgress(Math.round(results.gestures[0][0].score) * 100);
+      setProgress(Math.floor(results.gestures[0][0].score * 100));
     } else {
       setGestureOutput("");
       setProgress(0);
@@ -132,7 +108,7 @@ const Traduction = () => {
     if (webcamRunning === true) {
       requestRef.current = requestAnimationFrame(predictWebcam);
     }
-  }, [webcamRunning, runningMode, gestureRecognizer, setGestureOutput]);
+  }, [webcamRunning, runningMode, gestureRecognizer, setGestureOutput, showLandmarks]);
 
   const animate = useCallback(() => {
     requestRef.current = requestAnimationFrame(animate);
@@ -159,7 +135,7 @@ const Traduction = () => {
 
       // Remove empty values
       const nonEmptyData = detectedData.filter(
-        (data : any ) => data.SignDetected !== "" && data.DetectedScore !== ""
+        (data: any) => data.SignDetected !== "" && data.DetectedScore !== ""
       );
 
       //to filter continous same signs in an array
@@ -232,7 +208,6 @@ const Traduction = () => {
     }
     loadGestureRecognizer();
   }, [runningMode]);
-
   return (
     <>
       <div className="signlang_detection-container">
@@ -247,10 +222,20 @@ const Traduction = () => {
 
             <canvas ref={canvasRef} className="signlang_canvas" />
 
-            <div className="signlang_data-container">
+            <div className="signlang_data-container camera-button-container">
               <button onClick={enableCam}>
                 {webcamRunning ? "Stop" : "Start"}
               </button>
+
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={showLandmarks}
+                  onChange={() => setShowLandmarks(!showLandmarks)}
+                />
+                <span className="slider round"></span>
+              </label>
+              <span>Afficher les landmarks</span>
 
               <div className="signlang_data">
                 <p className="gesture_output">{gestureOutput}</p>
@@ -259,11 +244,7 @@ const Traduction = () => {
               </div>
             </div>
           </div>
-
-           
         </>
-
-         
       </div>
     </>
   );
