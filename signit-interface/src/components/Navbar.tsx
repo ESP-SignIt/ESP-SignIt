@@ -3,9 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/logo/logo-main.png'; // Import du logo
 import { useTheme } from '../ThemeContext';
 
-interface Props { };
-
-export const Navbar = ({ }: Props) => {
+export const Navbar = () => {
 
     const location = useLocation();
 

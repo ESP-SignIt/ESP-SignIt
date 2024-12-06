@@ -41,6 +41,7 @@ const Traduction = () => {
       nowInMs
     );
 
+    // Define dimension canvas
     const canvasCtx = canvasRef.current && canvasRef.current.getContext("2d");
     if (!canvasCtx) {
       console.error("Le contexte du canvas est introuvable.");
@@ -72,6 +73,7 @@ const Traduction = () => {
       canvasRef.current.height = videoHeight;
     }
 
+    // Create landmarks and connectors
     if (results.landmarks && showLandmarks) {
       for (const landmarks of results.landmarks) {
         drawingUtils.drawConnectors(
@@ -108,7 +110,13 @@ const Traduction = () => {
     if (webcamRunning === true) {
       requestRef.current = requestAnimationFrame(predictWebcam);
     }
-  }, [webcamRunning, runningMode, gestureRecognizer, setGestureOutput, showLandmarks]);
+  }, [
+    webcamRunning,
+    runningMode,
+    gestureRecognizer,
+    setGestureOutput,
+    showLandmarks,
+  ]);
 
   const animate = useCallback(() => {
     requestRef.current = requestAnimationFrame(animate);
@@ -154,10 +162,13 @@ const Traduction = () => {
       //calculate count for each repeated sign
       const countMap = new Map();
 
-      for (const item of resultArray) {
-        const count = countMap.get(item.SignDetected) || 0;
-        countMap.set(item.SignDetected, count + 1);
-      }
+      // console.log(resultArray);
+      // for (const item of resultArray) {
+      //   const count = countMap.get(item.SignDetected) || 0;
+      //   console.log(count);
+      //   console.log(item.SignDetected);
+      //   countMap.set(item.SignDetected, count + 1);
+      // }
 
       const sortedArray = Array.from(countMap.entries()).sort(
         (a, b) => b[1] - a[1]
