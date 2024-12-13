@@ -50,6 +50,7 @@ const imagesList = [
     { id: 23, src: W, alt: "Letter W" },
     { id: 24, src: X, alt: "Letter X" },
     { id: 25, src: Y, alt: "Letter Y" },
+    { id: 25, src: Y, alt: "Letter Z" },
   ];
 
   function ImageAlphabet() {

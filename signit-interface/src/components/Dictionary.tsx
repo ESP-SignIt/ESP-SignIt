@@ -2,17 +2,28 @@ import ImageAlphabet from "./ImageAlphabet";
 import Traduction from "./Traduction";
 
 export const Dictionary = () => {
-
-    return (
-        <div style={{ display: 'flex' }}>
-      <div style={{ width: '50%', padding: '20px' }}>
+  return (
+    <div style={{ display: "flex", height: '85vh' }}>
+      <div style={{ width: "50%"}}>
         <Traduction />
       </div>
-      <div style={{ width: '50%', padding: '20px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '10px', margin: '3px'  }}>
-        <ImageAlphabet/>
+      <div
+        style={{
+          height: '82vh',
+          overflowY: 'scroll',
+          overflowX: 'hidden',
+          width: "50%",
+          padding: "20px",
+          backgroundColor: "#CCCCCC",
+          border: "2px solid #FFA600",
+          borderRadius: "10px",
+          margin: "3px",
+        }}
+      >
+        <ImageAlphabet />
       </div>
     </div>
-    );
+  );
 };
 
 export default Dictionary;

@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
 import {
-  DrawingUtils,
   FilesetResolver,
   GestureRecognizer,
+  DrawingUtils
 } from "@mediapipe/tasks-vision";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import "./Traduction.css";
-
 import Webcam from "react-webcam";
 import ProgressBar from "./ProgressBar/ProgressBar.jsx";
 
@@ -26,8 +25,6 @@ const Traduction = () => {
   const requestRef = useRef<any>();
 
   const [detectedData, setDetectedData] = useState<any[]>([]);
-
-  const [currentImage, setCurrentImage] = useState<any>(null);
 
   const predictWebcam = useCallback(() => {
     if (runningMode === "IMAGE") {
@@ -48,6 +45,8 @@ const Traduction = () => {
       return;
     }
     canvasCtx.save();
+    canvasCtx.scale(-1, 1);
+    
     canvasRef.current &&
       canvasCtx.clearRect(
         0,
@@ -76,17 +75,25 @@ const Traduction = () => {
     // Create landmarks and connectors
     if (results.landmarks && showLandmarks) {
       for (const landmarks of results.landmarks) {
+        // Create a mirrored version of the landmarks
+        const mirroredLandmarks = landmarks.map((landmark: { x: number; y: any; z: any; }) => ({
+          x: 1 - landmark.x,  // Invert the x-coordinate
+          y: landmark.y,      // Keep y-coordinate the same
+          z: landmark.z       // Keep z-coordinate the same
+        }));
+    
         drawingUtils.drawConnectors(
-          landmarks,
+          mirroredLandmarks,
           GestureRecognizer.HAND_CONNECTIONS,
           {
             color: "#00FF00",
             lineWidth: 1,
           }
         );
-        drawingUtils.drawLandmarks(landmarks, {
+        
+        drawingUtils.drawLandmarks(mirroredLandmarks, {
           color: "#FF0000",
-          lineWidth: 1,
+          lineWidth: 0.1,
         });
       }
     }
@@ -132,7 +139,6 @@ const Traduction = () => {
     if (webcamRunning === true) {
       setWebcamRunning(false);
       cancelAnimationFrame(requestRef.current);
-      setCurrentImage(null);
 
       const endTime = new Date();
 
@@ -206,13 +212,13 @@ const Traduction = () => {
   useEffect(() => {
     async function loadGestureRecognizer() {
       const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
       );
       const recognizer = await GestureRecognizer.createFromOptions(vision, {
         baseOptions: {
           modelAssetPath: "/gesture_recognizer.task",
         },
-        numHands: 2,
+        numHands: 1,
         runningMode: runningMode,
       });
       setGestureRecognizer(recognizer);
@@ -227,6 +233,7 @@ const Traduction = () => {
             <Webcam
               audio={false}
               ref={webcamRef}
+              mirrored={true}
               // screenshotFormat="image/jpeg"
               className="signlang_webcam"
             />
@@ -246,12 +253,12 @@ const Traduction = () => {
                 />
                 <span className="slider round"></span>
               </label>
-              <span>Afficher les landmarks</span>
+              <span>Afficher la matrice</span>
 
               <div className="signlang_data">
                 <p className="gesture_output">{gestureOutput}</p>
 
-                {progress ? <ProgressBar progress={progress} /> : null}
+                {progress && gestureOutput ? <ProgressBar progress={progress} /> : null}
               </div>
             </div>
           </div>
