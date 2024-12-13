@@ -13,12 +13,13 @@ import ProgressBar from "./ProgressBar/ProgressBar.jsx";
 let startTime = new Date(0);
 
 const Traduction = () => {
+  console.log('render');
   const webcamRef = useRef<any>();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [webcamRunning, setWebcamRunning] = useState<boolean>(false);
   const [gestureOutput, setGestureOutput] = useState<any>();
   const [gestureRecognizer, setGestureRecognizer] = useState<any>();
-  const [runningMode, setRunningMode] = useState<any>("IMAGE");
+  const [runningMode, setRunningMode] = useState<any>("VIDEO");
   const [progress, setProgress] = useState<any>();
   const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
 
@@ -217,6 +218,7 @@ const Traduction = () => {
       const recognizer = await GestureRecognizer.createFromOptions(vision, {
         baseOptions: {
           modelAssetPath: "/gesture_recognizer.task",
+          delegate: "GPU"
         },
         numHands: 1,
         runningMode: runningMode,
