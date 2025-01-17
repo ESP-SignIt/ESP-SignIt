@@ -1,13 +1,21 @@
 import { Link, useLocation } from 'react-router-dom';
-
 import logo from '../assets/logo/logo-main.png'; // Import du logo
 import { useTheme } from '../ThemeContext';
+import { useEffect, useState } from 'react';
 
 export const Navbar = () => {
 
     const location = useLocation();
-
     const { isDarkMode, toggleTheme } = useTheme();
+    const [previousPath, setPreviousPath] = useState(location.pathname);
+
+
+    useEffect(() => {
+        if (location.pathname !== previousPath) {
+            window.location.reload();
+            setPreviousPath(location.pathname);
+        }
+    }, [location.pathname, previousPath]);
 
     return (
         <section id="navbar">
