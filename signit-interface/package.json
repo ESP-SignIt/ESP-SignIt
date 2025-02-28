@@ -38,7 +38,8 @@
   "scripts": {
     "start": "react-scripts start",
     "lint": "eslint './src/**/*.{ts,tsx,js,jsx}'",
-    "lint:fix": "eslint './src/**/*.{ts,tsx,js,jsx}' --fix"
+    "lint:fix": "eslint './src/**/*.{ts,tsx,js,jsx}' --fix",
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
