@@ -22,6 +22,12 @@ const Traduction = () => {
   const [runningMode, setRunningMode] = useState<any>("VIDEO");
   const [progress, setProgress] = useState<any>();
   const [showLandmarks, setShowLandmarks] = useState<boolean>(false);
+  const showLandmarksRef = useRef(showLandmarks);
+
+  // Update ref at each state change => fix matrice
+  useEffect(() => {
+    showLandmarksRef.current = showLandmarks;
+  }, [showLandmarks]);
 
   const requestRef = useRef<any>();
 
@@ -47,7 +53,7 @@ const Traduction = () => {
     }
     canvasCtx.save();
     canvasCtx.scale(-1, 1);
-    
+
     canvasRef.current &&
       canvasCtx.clearRect(
         0,
@@ -74,7 +80,7 @@ const Traduction = () => {
     }
 
     // Create landmarks and connectors
-    if (results.landmarks && showLandmarks) {
+    if (results.landmarks && showLandmarksRef.current) {
       for (const landmarks of results.landmarks) {
         // Create a mirrored version of the landmarks
         const mirroredLandmarks = landmarks.map((landmark: { x: number; y: any; z: any; }) => ({
@@ -82,7 +88,7 @@ const Traduction = () => {
           y: landmark.y,      // Keep y-coordinate the same
           z: landmark.z       // Keep z-coordinate the same
         }));
-    
+
         drawingUtils.drawConnectors(
           mirroredLandmarks,
           GestureRecognizer.HAND_CONNECTIONS,
@@ -91,7 +97,7 @@ const Traduction = () => {
             lineWidth: 1,
           }
         );
-        
+
         drawingUtils.drawLandmarks(mirroredLandmarks, {
           color: "#FF0000",
           lineWidth: 0.1,
@@ -207,7 +213,7 @@ const Traduction = () => {
     animate,
     detectedData,
     "user?.name",
-    " user?.userId",
+    "user?.userId",
   ]);
 
   useEffect(() => {
