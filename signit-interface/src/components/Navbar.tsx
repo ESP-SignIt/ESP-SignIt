@@ -29,13 +29,13 @@ export const Navbar = () => {
                 >
                     Traduction
                 </Link>
-                <Link
+                {/* <Link
                     to="/dictionary"
                     title="SignIt - Dictionnaire"
                     className={location.pathname.startsWith('/dictionary') ? 'nav-link-selected' : 'nav-link'}
                 >
                     Dictionnaire
-                </Link>
+                </Link> */}
             </div>
         </section>
     );
