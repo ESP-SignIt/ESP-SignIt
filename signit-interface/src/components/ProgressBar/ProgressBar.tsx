@@ -1,6 +1,10 @@
-import "./ProgressBar.css";
+import "../../styles/progressBar.css";
 
-const ProgressBar = ({ progress }) => {
+interface Props {
+  progress: number;
+}
+
+const ProgressBar = ({ progress }: Props) => {
   return (
     <div className="progress-container">
       <div

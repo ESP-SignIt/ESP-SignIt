@@ -1,5 +1,5 @@
-import ImageAlphabet from "./ImageAlphabet";
-import Traduction from "./Traduction";
+import ImageAlphabet from "../ImageAlphabet/ImageAlphabet";
+import Traduction from "../Traduction/Traduction";
 
 export const Dictionary = () => {
   return (

@@ -1,14 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../assets/logo/logo-main.png'; // Import du logo
-import { useTheme } from '../ThemeContext';
 import { useEffect, useState } from 'react';
 
 export const Navbar = () => {
 
     const location = useLocation();
-    const { isDarkMode, toggleTheme } = useTheme();
     const [previousPath, setPreviousPath] = useState(location.pathname);
-
 
     useEffect(() => {
         if (location.pathname !== previousPath) {
@@ -39,9 +36,6 @@ export const Navbar = () => {
                 >
                     Dictionnaire
                 </Link>
-                <span className='nav-link' onClick={() => toggleTheme()}>
-                    {!isDarkMode ? "Mode sombre" : "Mode clair"}
-                </span>
             </div>
         </section>
     );

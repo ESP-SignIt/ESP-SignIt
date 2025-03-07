@@ -6,14 +6,13 @@ import {
 } from "@mediapipe/tasks-vision";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import "./Traduction.css";
+import "../../styles/traduction.css";
 import Webcam from "react-webcam";
-import ProgressBar from "./ProgressBar/ProgressBar.jsx";
+import ProgressBar from "../ProgressBar/ProgressBar";
 
 let startTime = new Date(0);
 
 const Traduction = () => {
-  console.log('render');
   const webcamRef = useRef<any>();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [webcamRunning, setWebcamRunning] = useState<boolean>(false);
@@ -72,8 +71,8 @@ const Traduction = () => {
     const drawingUtils = new DrawingUtils(canvasCtx);
     // Set canvas height and width
     if (canvasRef.current) {
-      console.log("Height" + videoHeight);
-      console.log("Width" + videoWidth);
+      // console.log("Height" + videoHeight);
+      // console.log("Width" + videoWidth);
 
       canvasRef.current.width = videoWidth;
       canvasRef.current.height = videoHeight;
@@ -105,7 +104,7 @@ const Traduction = () => {
       }
     }
 
-    console.log(results.gestures.length);
+    // console.log(results.gestures.length);
     if (results.gestures.length > 0) {
       setDetectedData((prevData: any) => [
         ...prevData,
