@@ -1,0 +1,10 @@
+:root {
+    --signit-orange: rgb(255, 165, 0);
+    --signit-orange-opacity30: rgba(255, 165, 0, 0.3);
+    --signit-orange-opcaity10: rgba(255, 165, 0, 0.1);
+    --signit-grey: rgb(163,175,180);
+    --signit-grey-opacity30: rgba(163,175,180, 0.3);
+    --signit-grey-opacity10: rgba(163,175,180, 0.1);
+    --signit-white: #FFFFFF;
+    --signit-black: #000000;
+}

@@ -1,0 +1,81 @@
+@import '../assets/fonts/fonts.css';
+@import './colors.css';
+
+* {
+  font-family: 'Brother1816-regular', sans-serif;
+}
+
+body {
+  margin: 0 auto;
+}
+
+h1 {
+  font-family: 'Brother1816-bold', sans-serif;
+}
+
+.italic-text {
+  font-family: 'Brother1816-italic', sans-serif;
+}
+
+.bold-text {
+  font-family: 'Brother1816-bold', sans-serif;
+}
+
+.signit-orange {
+  color: var(--signit-orange);
+}
+
+.box {
+  border: 2px solid var(--signit-grey)
+}
+
+section#navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+img#logo-main {
+  height: 60px;
+  width: auto;
+  margin: 20px;
+}
+
+.page-content {
+  border-top: 3px solid var(--signit-orange);
+}
+
+.flex {
+  display: flex;
+  gap: 40px;
+}
+
+.margin-right {
+  margin-right: 40px;
+}
+
+.nav-link {
+  font-family: 'Brother1816-regular' !important;
+  font-weight: 700;
+  color: inherit !important;
+
+  text-decoration: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  transition: 0.2s !important;
+  color: var(--signit-orange) !important;
+}
+
+.nav-link-selected {
+  font-family: 'Brother1816-regular' !important;
+  font-weight: 700;
+  color: var(--signit-orange) !important;
+  text-decoration: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
