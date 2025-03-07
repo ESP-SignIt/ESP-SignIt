@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'Brother1816-regular';
+    src: url('./Brother1816-Book.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Brother1816-italic';
+    src: url('./Brother1816-BookItalic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Brother1816-bold';
+    src: url('./Brother1816-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
