@@ -22,6 +22,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
+    "cypress": "^14.3.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^4.6.2",
@@ -38,7 +39,9 @@
   "scripts": {
     "start": "react-scripts start",
     "lint": "eslint './src/**/*.{ts,tsx,js,jsx}'",
-    "lint:fix": "eslint './src/**/*.{ts,tsx,js,jsx}' --fix"
+    "lint:fix": "eslint './src/**/*.{ts,tsx,js,jsx}' --fix",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "eslintConfig": {
     "extends": [
