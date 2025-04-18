@@ -1,11 +1,11 @@
-import ImageAlphabet from "./ImageAlphabet";
-import Traduction from "./Traduction";
+import ImageAlphabet from "../ImageAlphabet/ImageAlphabet";
+import DictionaryTraduction from "./DictionaryTraduction";
 
 export const Dictionary = () => {
   return (
     <div style={{ display: "flex", height: '85vh' }}>
-      <div style={{ width: "50%"}}>
-        <Traduction />
+      <div style={{ width: "50%" }}>
+        <DictionaryTraduction />
       </div>
       <div
         style={{

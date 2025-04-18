@@ -6,14 +6,12 @@ import {
 } from "@mediapipe/tasks-vision";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import "./Traduction.css";
+import "../../styles/traduction.css";
 import Webcam from "react-webcam";
-import ProgressBar from "./ProgressBar/ProgressBar.jsx";
 
 let startTime = new Date(0);
 
-const Traduction = () => {
-  console.log('render');
+const DictionaryTraduction = () => {
   const webcamRef = useRef<any>();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [webcamRunning, setWebcamRunning] = useState<boolean>(false);
@@ -72,8 +70,8 @@ const Traduction = () => {
     const drawingUtils = new DrawingUtils(canvasCtx);
     // Set canvas height and width
     if (canvasRef.current) {
-      console.log("Height" + videoHeight);
-      console.log("Width" + videoWidth);
+      // console.log("Height" + videoHeight);
+      // console.log("Width" + videoWidth);
 
       canvasRef.current.width = videoWidth;
       canvasRef.current.height = videoHeight;
@@ -105,7 +103,7 @@ const Traduction = () => {
       }
     }
 
-    console.log(results.gestures.length);
+    // console.log(results.gestures.length);
     if (results.gestures.length > 0) {
       setDetectedData((prevData: any) => [
         ...prevData,
@@ -234,46 +232,47 @@ const Traduction = () => {
     loadGestureRecognizer();
   }, [runningMode]);
   return (
-    <>
-      <div className="signlang_detection-container">
-        <>
-          <div style={{ position: "relative" }}>
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              mirrored={true}
-              // screenshotFormat="image/jpeg"
-              className="signlang_webcam"
+    <div className="signlang_detection-container">
+      <div style={{ position: "relative" }}>
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          mirrored={true}
+          // screenshotFormat="image/jpeg"
+          className="signlang_webcam"
+        />
+
+        <canvas ref={canvasRef} className="signlang_canvas" />
+
+        <div className="signlang_data-container camera-button-container">
+          <button onClick={enableCam}>
+            {webcamRunning ? "Stop" : "Start"}
+          </button>
+
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={showLandmarks}
+              onChange={() => setShowLandmarks(!showLandmarks)}
             />
+            <span className="slider round"></span>
+          </label>
+          <span>Afficher la matrice</span>
 
-            <canvas ref={canvasRef} className="signlang_canvas" />
-
-            <div className="signlang_data-container camera-button-container">
-              <button onClick={enableCam}>
-                {webcamRunning ? "Stop" : "Start"}
-              </button>
-
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={showLandmarks}
-                  onChange={() => setShowLandmarks(!showLandmarks)}
-                />
-                <span className="slider round"></span>
-              </label>
-              <span>Afficher la matrice</span>
-
-              <div className="signlang_data">
-                <p className="gesture_output">{gestureOutput}</p>
-
-                {progress && gestureOutput ? <ProgressBar progress={progress} /> : null}
-              </div>
-            </div>
+          <div className="signlang_data">
+            <p className="gesture_output">{gestureOutput}</p>
+            {(progress && gestureOutput) ?
+              <span className="primaryText">
+                {progress}%
+              </span>
+              :
+              null
+            }
           </div>
-        </>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default Traduction;
+export default DictionaryTraduction;
