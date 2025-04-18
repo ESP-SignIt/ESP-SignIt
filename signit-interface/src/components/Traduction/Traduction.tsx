@@ -26,6 +26,38 @@ const Traduction = () => {
 
     const [pictureURL, setPictureURL] = useState<string>("");
 
+    const [isWideScreen, setIsWideScreen] = useState(window.innerWidth >= 1400);
+    const [isPhoneScreen, setIsPhoneScreen] = useState(window.innerWidth < 800);
+
+    useEffect(() => {
+        // Create media queries
+        const wideScreenQuery = window.matchMedia('(min-width: 1400px)');
+        const phoneScreenQuery = window.matchMedia('(max-width: 799px)');
+
+        // Set initial states based on media queries
+        setIsWideScreen(wideScreenQuery.matches);
+        setIsPhoneScreen(phoneScreenQuery.matches);
+
+        // Define handler functions
+        const handleWideScreenChange = (e: any) => {
+            setIsWideScreen(e.matches);
+        };
+
+        const handlePhoneScreenChange = (e: any) => {
+            setIsPhoneScreen(e.matches);
+        };
+
+        // Add event listeners
+        wideScreenQuery.addEventListener('change', handleWideScreenChange);
+        phoneScreenQuery.addEventListener('change', handlePhoneScreenChange);
+
+        // Clean up
+        return () => {
+            wideScreenQuery.removeEventListener('change', handleWideScreenChange);
+            phoneScreenQuery.removeEventListener('change', handlePhoneScreenChange);
+        };
+    }, []);
+
     // Update ref at each state change => fix matrice
     useEffect(() => {
         showLandmarksRef.current = showLandmarks;
@@ -253,7 +285,8 @@ const Traduction = () => {
             <div
                 style={{
                     position: "absolute",
-                    bottom: 10,
+                    bottom: !isPhoneScreen ? 10 : "auto",
+                    top: isPhoneScreen ? "10%" : "auto",
                     left: "50%",
                     transform: "translateX(-50%)",
                 }}
@@ -288,32 +321,33 @@ const Traduction = () => {
                             null
                         }
                     </div>
-                    <div style={{
-                        position: "absolute",
-                        top: 10,
-                        right: 10,
-                        width: "15%",
-                        backgroundColor: "white",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: 0
-                    }}
-                        id="start-btn"
-                    >
-                        <label className="switch">
-                            <input
-                                type="checkbox"
-                                checked={showLandmarks}
-                                onChange={() => setShowLandmarks(!showLandmarks)}
-                            />
-                            <span className="slider round"></span>
-                        </label>
-                        <span>Afficher la matrice</span>
-                    </div>
-
-                    {showLandmarks &&
+                    {isWideScreen &&
+                        <div style={{
+                            position: "absolute",
+                            top: 10,
+                            right: 10,
+                            width: "15%",
+                            backgroundColor: "white",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: 0
+                        }}
+                            id="start-btn"
+                        >
+                            <label className="switch">
+                                <input
+                                    type="checkbox"
+                                    checked={showLandmarks}
+                                    onChange={() => setShowLandmarks(!showLandmarks)}
+                                />
+                                <span className="slider round"></span>
+                            </label>
+                            <span>Afficher la matrice</span>
+                        </div>
+                    }
+                    {isWideScreen && showLandmarks &&
                         <canvas style={{
                             position: "absolute",
                             bottom: 10,
@@ -330,18 +364,22 @@ const Traduction = () => {
                         style={{
                             position: "absolute",
                             bottom: 10,
-                            right: 10,
+                            right: !isPhoneScreen ? 10 : "auto",
                             backgroundColor: "grey",
-                            width: "15%",
+                            width: !isPhoneScreen ? "15%" : "50%",
                             borderRadius: 15,
                             border: "1px solid black",
                             display: "flex",
                             flexDirection: "column",
                             alignContent: "center",
-                            alignItems: "center"
+                            alignItems: "center",
+                            ...(isPhoneScreen && {
+                                left: "50%",
+                                transform: "translateX(-50%)"
+                            })
                         }}
                     >
-                        <select onChange={(event) => displaySelectedPicture(event)} style={{ width: "80%", textAlign: "center", marginTop: 10, marginBottom: 10 }}>
+                        <select onChange={(event) => displaySelectedPicture(event)} style={{ width: "90%", textAlign: "center", marginTop: 10, marginBottom: 10 }}>
                             <option value=""> -- Sélectionner -- </option>
                             {imageList && imageList.map((image: ImageList) => {
                                 return (
@@ -350,7 +388,7 @@ const Traduction = () => {
                             })}
                         </select>
                         {pictureURL &&
-                            <img src={pictureURL} alt="Dictionnaire" style={{ marginBottom: 10}} />
+                            <img src={pictureURL} alt="Dictionnaire" style={{ marginBottom: 10 }} />
                         }
                     </div>
 
