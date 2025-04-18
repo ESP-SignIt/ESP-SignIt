@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SignIt.unity
+    guid: 93f26053fc858414eae6e16b20de8fc8
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: f839108d1a3420741a142c7631c0fbd1, type: 2}
+    com.unity.input.settings: {fileID: 11400000, guid: bf40ba5da85b1034bbb733c62a195598, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 52873141c33956749bcd326d80097f88, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 2bbbcae54f4892240af6c9d9c5b2c95d, type: 2}
