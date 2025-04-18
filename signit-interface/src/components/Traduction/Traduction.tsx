@@ -350,7 +350,7 @@ const Traduction = () => {
                             })}
                         </select>
                         {pictureURL &&
-                            <img src={pictureURL} alt="Dictionnaire" style={{ marginBottom: 10 }} />
+                            <img src={pictureURL} alt="Dictionnaire" style={{ marginBottom: 10}} />
                         }
                     </div>
 

@@ -232,3 +232,13 @@ input:checked+.slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.matrice-responsive-toggle {
+  width: 15% !important;
+}
+
+@media screen and (max-width: 768px) {
+  .matrice-responsive-toggle {
+    width: 50% !important;
+  }
+}
