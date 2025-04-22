@@ -44,8 +44,11 @@ cypress/videos/
 cypress/results/
 cypress/dataset/
 
-# Datasets
+# Ignorer le dataset
 Etat de l'art/Pôle IA/Code For Training the Model/DATASET_mixed/
 
 # Client secrets
 Etat de l'art/Pôle IA/Code For Training the Model/client_secrets.json
+
+# Ignorer le modèle exporté
+Etat de l'art/Pôle IA/Code For Training the Model/exported_model/
