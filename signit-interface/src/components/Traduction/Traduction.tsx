@@ -67,27 +67,31 @@ const Traduction = () => {
     }, []);
 
     // Switch video source
-    useEffect(() => {
-        const video = videoRef.current!;
-        setIsReady(false);
-        // stop any old camera stream
-        if (!videoInput && video.srcObject instanceof MediaStream) {
-            (video.srcObject as MediaStream).getTracks().forEach((t) => t.stop());
-            video.srcObject = null;
-        }
-        if (!videoInput) {
-            navigator.mediaDevices
-                .getUserMedia({ video: true })
-                .then((stream) => {
-                    video.srcObject = stream;
-                })
-                .catch(console.error);
-        } else {
-            video.srcObject = null;
-            video.src = videoInput;
-            video.loop = true;
-        }
-    }, [videoInput]);
+useEffect(() => {
+    const video = videoRef.current!;
+    setIsReady(false);
+    // stop any old camera stream
+    if (!videoInput && video.srcObject instanceof MediaStream) {
+        (video.srcObject as MediaStream).getTracks().forEach((t) => t.stop());
+        video.srcObject = null;
+    }
+    if (!videoInput) {
+        navigator.mediaDevices
+            .getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+                video.play().catch(console.error); // Ajout de video.play() pour démarrer le flux vidéo
+            })
+            .catch((error) => {
+                console.error("Erreur lors de l'accès à la caméra:", error);
+                alert("Impossible d'accéder à la caméra. Veuillez vérifier les permissions de la caméra.");
+            });
+    } else {
+        video.srcObject = null;
+        video.src = videoInput;
+        video.loop = true;
+    }
+}, [videoInput]);
 
     useEffect(() => {
 
@@ -203,20 +207,20 @@ const Traduction = () => {
         return () => clearInterval(interval);
     }, []);
 
-const handleWheel = (e: React.WheelEvent<HTMLImageElement>) => {
-    const currentIndex = imageList.findIndex(img => img.src === pictureURL);
-    let newIndex = currentIndex;
+    const handleWheel = (e: React.WheelEvent<HTMLImageElement>) => {
+        const currentIndex = imageList.findIndex(img => img.src === pictureURL);
+        let newIndex = currentIndex;
 
-    if (e.deltaY < 0) {
-        // Scroll up
-        newIndex = (currentIndex - 1 + imageList.length) % imageList.length;
-    } else {
-        // Scroll down
-        newIndex = (currentIndex + 1) % imageList.length;
-    }
+        if (e.deltaY < 0) {
+            // Scroll up
+            newIndex = (currentIndex - 1 + imageList.length) % imageList.length;
+        } else {
+            // Scroll down
+            newIndex = (currentIndex + 1) % imageList.length;
+        }
 
-    setPictureURL(imageList[newIndex].src);
-};
+        setPictureURL(imageList[newIndex].src);
+    };
 
     return (
         <div className="traduction-container">
@@ -237,7 +241,6 @@ const handleWheel = (e: React.WheelEvent<HTMLImageElement>) => {
                     <button onClick={onToggle} disabled={!isReady || !recognizer} id="start-btn">
                         {running ? "Arrêter" : "Commencer"}
                     </button>
-
 
                 </div>
                 <div style={{
@@ -275,7 +278,6 @@ const handleWheel = (e: React.WheelEvent<HTMLImageElement>) => {
                         {signedLetters.map((letter, index) => {
                             return <div className="signed top noborder">
                                 <p className={letter.className + " gesture_output"}>{letter.letter || "..."}</p>
-
 
                             </div>
                         })}

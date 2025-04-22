@@ -43,6 +43,7 @@ section#navbar {
   background-color: transparent;
   position: fixed;
   z-index: 999;
+  margin: 1rem;
 }
 
 img#logo-main {
