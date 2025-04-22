@@ -1,6 +1,6 @@
-import { Link, useLocation } from 'react-router-dom';
-import logo from '../assets/logo/logo-main.png'; // Import du logo
 import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import logo from '../assets/logo/logo.png'; // Import du logo
 
 export const Navbar = () => {
 
