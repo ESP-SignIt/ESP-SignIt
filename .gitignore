@@ -1,0 +1,8 @@
+# Ignorer le dataset
+Etat de l'art/Pôle IA/Code For Training the Model/DATASET_mixed/
+
+# Ignorer le modèle exporté
+Etat de l'art/Pôle IA/Code For Training the Model/exported_model/
+
+# Ignorer le fichier de secrets client
+Etat de l'art/Pôle IA/Code For Training the Model/client_secrets.json
