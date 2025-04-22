@@ -3,12 +3,13 @@ title: SignIt
 description: Un traducteur de langue des signes capable de lire lalphabet
 ---
 
+![Logo SignIt](signit-interface/src/assets/logo/logo.png)
+
 # SignIt
 
 ## Introduction
 
 SignIt est un traducteur de langue des signes capable de lire l'alphabet. Ce projet a été développé en React et utilise un modèle de machine learning pour la reconnaissance des gestes. Il s'agit d'un projet de fin d'études pour le Msc Pro à Epitech, réalisé par une équipe de 8 collaborateurs.
-
 
 ## Fonctionnalités
 
