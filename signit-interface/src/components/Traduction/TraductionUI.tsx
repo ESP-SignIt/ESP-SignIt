@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import TraductionTutorial from './TraductionTutorial/TraductionTutorial';
+import { useState } from 'react';
 import Traduction from './Traduction';
+import TraductionTutorial from './TraductionTutorial/TraductionTutorial';
 
 interface Props { };
 
 export const TraductionUI = ({ }: Props) => {
 
-    const [displayTutorial, setDisplayTutorial] = useState<boolean>(true);
+    const [displayTutorial, setDisplayTutorial] = useState<boolean>(localStorage.getItem("displayTutorial") == "true");
 
     const closeTutorial = () => {
         setDisplayTutorial(false);

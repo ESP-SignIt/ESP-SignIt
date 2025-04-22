@@ -11,6 +11,7 @@
 
 body {
   margin: 0 auto;
+  overflow: hidden;
 }
 
 h1 {
@@ -38,6 +39,11 @@ section#navbar {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  height: 5vh;
+  background-color: transparent;
+  position: fixed;
+  z-index: 999;
+  margin: 1rem;
 }
 
 img#logo-main {

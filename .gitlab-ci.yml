@@ -1,0 +1,40 @@
+image: node:18
+
+# Cache node_modules between jobs
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - signit-interface/node_modules/
+
+stages:
+  - setup
+  - quality
+  - build
+
+install:
+  stage: setup
+  script:
+    - cd signit-interface
+    - yarn install
+  artifacts:
+    paths:
+      - signit-interface/node_modules/
+
+lint:
+  stage: quality
+  script:
+    - cd signit-interface
+    - yarn lint
+  dependencies:
+    - install
+
+build:
+  stage: build
+  script:
+    - cd signit-interface
+    - yarn build
+  artifacts:
+    paths:
+      - signit-interface/build/
+  dependencies:
+    - install
