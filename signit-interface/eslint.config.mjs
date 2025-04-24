@@ -1,6 +1,6 @@
 import pluginJs from "@eslint/js";
 import parserTs from "@typescript-eslint/parser";
-import pluginCypress from "eslint-plugin-cypress";
+//import pluginCypress from "eslint-plugin-cypress";
 import globals from "globals";
 
 // La configuration ESLint au format "flat config"
@@ -22,5 +22,5 @@ export default [
   // pluginReact.configs.flat.recommended,
 
   // Appliquer les configurations recommandées de Cypress
-  pluginCypress.configs.recommended,
+  //pluginCypress.configs.recommended,
 ];

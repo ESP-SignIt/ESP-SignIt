@@ -3,16 +3,26 @@ import {
     FilesetResolver,
     GestureRecognizer
 } from "@mediapipe/tasks-vision";
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import "../../styles/traduction.css";
 import imageList, { ImageList } from "../ImageAlphabet/imageList";
+import CGU from './CGU/CGU';
 
+interface Props {
+    // eslint-disable-next-line no-unused-vars
+    setDisplayTutorial: (_value: boolean) => void;
+}
+
+// eslint-disable-next-line no-unused-vars
 let startTime = new Date(0);
 
-const Traduction = () => {
+const Traduction = ({ setDisplayTutorial }: Props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const rafRef = useRef<number>();
+
+    const [isGoodLetter, setIsGoodLetter] = useState<boolean>(false);
+    const [selectedLetter, setSelectedLetter] = useState<string>("");
 
     const [videoInput, setVideoInput] = useState<string | null>(null);
     const [running, setRunning] = useState(false);
@@ -21,7 +31,7 @@ const Traduction = () => {
     const [recognizer, setRecognizer] = useState<any | null>(null);
     const [gesture, setGesture] = useState("");
     const [score, setScore] = useState(0);
-    const [showLandmarks, setShowLandmarks] = useState(true);
+    const showLandmarks = true;
     const showRef = useRef(showLandmarks);
 
     const [pictureURL, setPictureURL] = useState("");
@@ -30,6 +40,9 @@ const Traduction = () => {
 
     const [signedLetters, setSignedLetters] = useState<{ letter: string, timestamp: number, className: string }[]>([]);
     const [currentLetter, setCurrentLetter] = useState<string>('');
+
+    // New state for tutorial and CGU display
+    const [showCGU, setShowCGU] = useState<boolean>(false);
 
     // Load Mediapipe model
     useEffect(() => {
@@ -67,31 +80,31 @@ const Traduction = () => {
     }, []);
 
     // Switch video source
-useEffect(() => {
-    const video = videoRef.current!;
-    setIsReady(false);
-    // stop any old camera stream
-    if (!videoInput && video.srcObject instanceof MediaStream) {
-        (video.srcObject as MediaStream).getTracks().forEach((t) => t.stop());
-        video.srcObject = null;
-    }
-    if (!videoInput) {
-        navigator.mediaDevices
-            .getUserMedia({ video: true })
-            .then((stream) => {
-                video.srcObject = stream;
-                video.play().catch(console.error); // Ajout de video.play() pour démarrer le flux vidéo
-            })
-            .catch((error) => {
-                console.error("Erreur lors de l'accès à la caméra:", error);
-                alert("Impossible d'accéder à la caméra. Veuillez vérifier les permissions de la caméra.");
-            });
-    } else {
-        video.srcObject = null;
-        video.src = videoInput;
-        video.loop = true;
-    }
-}, [videoInput]);
+    useEffect(() => {
+        const video = videoRef.current!;
+        setIsReady(false);
+        // stop any old camera stream
+        if (!videoInput && video.srcObject instanceof MediaStream) {
+            (video.srcObject as MediaStream).getTracks().forEach((t) => t.stop());
+            video.srcObject = null;
+        }
+        if (!videoInput) {
+            navigator.mediaDevices
+                .getUserMedia({ video: true })
+                .then((stream) => {
+                    video.srcObject = stream;
+                    video.play().catch(console.error); // Ajout de video.play() pour démarrer le flux vidéo
+                })
+                .catch((error) => {
+                    console.error("Erreur lors de l'accès à la caméra:", error);
+                    alert("Impossible d'accéder à la caméra. Veuillez vérifier les permissions de la caméra.");
+                });
+        } else {
+            video.srcObject = null;
+            video.src = videoInput;
+            video.loop = true;
+        }
+    }, [videoInput]);
 
     useEffect(() => {
 
@@ -107,7 +120,7 @@ useEffect(() => {
 
     // Prediction loop
     const loop = useCallback(() => {
-        const video = videoRef.current!;
+        // const video = videoRef.current!;
         const canvas = canvasRef.current!;
         const ctx = canvas.getContext("2d")!;
 
@@ -177,7 +190,7 @@ useEffect(() => {
 
     // Ce hook useEffect ajoute une nouvelle lettre signée à la liste des lettres signées
     // lorsque currentLetter change. Chaque lettre est associée à un timestamp.
-    // On ajoute la lettre seulement si elle reste la même pendant 1 seconde.
+    // On ajoute la lettre seulement si elle reste la même pendant 0.5 seconde.
     useEffect(() => {
         if (currentLetter) {
             const timeoutId = setTimeout(() => {
@@ -185,9 +198,15 @@ useEffect(() => {
                     ...prevLetters,
                     { letter: currentLetter, timestamp: Date.now(), className: 'signed' }
                 ]);
+                if (currentLetter == selectedLetter) {
+                    setIsGoodLetter(true);
+                }
             }, 500);
 
-            return () => clearTimeout(timeoutId);
+            return () => {
+                clearTimeout(timeoutId);
+                setIsGoodLetter(false);
+            }
         }
     }, [currentLetter]);
 
@@ -208,6 +227,7 @@ useEffect(() => {
     }, []);
 
     const handleWheel = (e: React.WheelEvent<HTMLImageElement>) => {
+
         const currentIndex = imageList.findIndex(img => img.src === pictureURL);
         let newIndex = currentIndex;
 
@@ -222,8 +242,38 @@ useEffect(() => {
         setPictureURL(imageList[newIndex].src);
     };
 
+    const handlePictureChange = (e: React.ChangeEvent<any>) => {
+
+        // Extract selected letter
+        let pictureNameArray = e.target.value.split("/static/media/");
+
+        if (pictureNameArray.length > 1) {
+            console.log("setted => ", pictureNameArray[1].charAt(0))
+            setSelectedLetter(pictureNameArray[1].charAt(0));
+        }
+
+        setPictureURL(e.target.value)
+    }
+
+    // Handle tutorial and CGU display
+    const handleShowTutorial = () => {
+        setShowCGU(false);
+        setDisplayTutorial(true);
+    };
+
+    const handleShowCGU = () => {
+        setDisplayTutorial(false);
+        setShowCGU(true);
+    };
+
+    const handleCloseCGU = () => {
+        setShowCGU(false);
+    };
+
     return (
         <div className="traduction-container">
+            {showCGU && <CGU onClose={handleCloseCGU} />}
+
             <video
                 ref={videoRef}
                 className="signlang_video"
@@ -249,11 +299,12 @@ useEffect(() => {
                     right: 10,
                     width: "15%",
                     backgroundColor: "white",
-                    display: "flex",
+                    display: isPhone ? "none": "flex",
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: 0
+                    padding: 0,
+                    
                 }}
                     id="start-btn"
                 >
@@ -269,28 +320,23 @@ useEffect(() => {
                 </div>
                 {running && (
                     <div className="info">
-                        <div className="top">
-                            <p className="gesture_output">{currentLetter || "..."}</p>
+                        <div className="top" style={{
+                            color: (isGoodLetter ? "#1DB954" : "white"),
+                            borderColor: (isGoodLetter ? "#1DB954" : "white"),
+                        }}>
+                            <p className="gesture_output" style={{ fontWeight: "bold" }}>{currentLetter || "..."}</p>
 
                             {score > 0 ? <span className="score">{score}%</span> : <span className="score">--%</span>}
                         </div>
 
                         {signedLetters.map((letter, index) => {
-                            return <div className="signed top noborder">
-                                <p className={letter.className + " gesture_output"}>{letter.letter || "..."}</p>
-
-                            </div>
+                            return (
+                                <div className="signed top noborder" key={index}>
+                                    <p className={letter.className + " gesture_output"}>{letter.letter || "..."}</p>
+                                </div>
+                            );
                         })}
-                        {/* {isWide && (
-                        <label className="switch">
-                            <input
-                                type="checkbox"
-                                checked={showLandmarks}
-                                onChange={() => setShowLandmarks((v) => !v)}
-                            />
-                            <span>Afficher matrice</span>
-                        </label>
-                    )} */}
+
                         {isWide && (
 
                             <div style={{
@@ -308,10 +354,10 @@ useEffect(() => {
                             }}>
                                 {pictureURL && <img src={pictureURL} alt="Dictionnaire" onWheel={handleWheel} />}
 
-                                <select onChange={(e) => setPictureURL(e.target.value)}>
+                                <select onChange={(e) => handlePictureChange(e)}>
                                     <option value="">-- Sélectionner --</option>
-                                    {imageList.map((img: ImageList) => (
-                                        <option key={img.src} value={img.src}>
+                                    {imageList.map((img: ImageList, index: number) => (
+                                        <option key={img.src + index} value={img.src}>
                                             {img.alt}
                                         </option>
                                     ))}
@@ -321,6 +367,23 @@ useEffect(() => {
                         )}
                     </div>
                 )}
+
+                {/* Bottom left buttons */}
+                <div className="helpersDiv" style={{ display: running ? "none" : "block", textAlign: "end" }}>
+                    <button
+                        onClick={handleShowTutorial}
+                        className="start-btn"
+                    >
+                        ?
+                    </button>
+                    <br />
+                    <button
+                        onClick={handleShowCGU}
+                        className="start-btn"
+                    >
+                        CGU
+                    </button>
+                </div>
             </div>
         </div>
     );

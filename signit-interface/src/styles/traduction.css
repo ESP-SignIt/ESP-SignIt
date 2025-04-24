@@ -8,6 +8,9 @@
 
 .traduction-container {
   position: relative;
+  height: 100vh !important;
+  overflow-y: hidden; /* Allow vertical scrolling */
+  -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
 }
 
 .signlang_video {
@@ -51,7 +54,42 @@
   transform: translateX(-50%);
 }
 
+.helpersDiv {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+
 #start-btn {
+  background-color: #FFFFFF;
+  border: 1px solid var(--signit-black);
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-family: 'Brother1816-bold', sans-serif;
+  color: var(--signit-black);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  margin: 0;
+  outline: none;
+  padding: 13px 23px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow .2s, -ms-transform .1s, -webkit-transform .1s, transform .1s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.start-btn {
   background-color: #FFFFFF;
   border: 1px solid var(--signit-black);
   border-radius: 8px;
@@ -340,4 +378,50 @@ input:checked+.slider:before {
     width: 100%;
     height: auto;
   }
+  
+  /* Mobile-specific styles */
+ /*  .traduction-container {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .controls {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .info {
+    position: relative;
+    margin-top: 20px;
+  } */
+  
+  /* Fix for iOS Safari */
+  @supports (-webkit-touch-callout: none) {
+    .traduction-container {
+      height: -webkit-fill-available !important;
+    }
+  }
 }
+
+/* Separate media query for portrait orientation */
+/* @media screen and (max-width: 768px) and (orientation: portrait) {
+  .traduction-container {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .controls {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .info {
+    position: relative;
+    margin-top: 20px;
+  }
+} */
