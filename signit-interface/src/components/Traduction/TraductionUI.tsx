@@ -3,17 +3,13 @@ import Traduction from './Traduction';
 import TraductionTutorial from './TraductionTutorial/TraductionTutorial';
 import CGU from './CGU/CGU';
 
-// Props interface for the TraductionUI component
-// Currently empty but can be extended with additional props if needed
-interface Props { };
-
 /**
  * TraductionUI Component
  * 
  * This component manages the display of either a tutorial or the main translation interface.
  * It uses localStorage to remember if the user has already seen the tutorial.
  */
-export const TraductionUI = ({ }: Props) => {
+export const TraductionUI = () => {
 
     // State to control whether to display the tutorial or the main translation interface
     // Initialized from localStorage, defaults to showing tutorial if not previously dismissed
@@ -24,11 +20,11 @@ export const TraductionUI = ({ }: Props) => {
     useEffect(() => {
         const skipTutorial = localStorage.getItem('skipTutorial');
         const cguAccepted = localStorage.getItem('cguAccepted');
-        
+
         if (!skipTutorial) {
             setDisplayTutorial(true);
         }
-        
+
         if (!cguAccepted) {
             setDisplayCGU(true);
         }

@@ -3,19 +3,20 @@ import {
     FilesetResolver,
     GestureRecognizer
 } from "@mediapipe/tasks-vision";
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import "../../styles/traduction.css";
 import imageList, { ImageList } from "../ImageAlphabet/imageList";
-import TraductionTutorial from './TraductionTutorial/TraductionTutorial';
 import CGU from './CGU/CGU';
 
 interface Props {
-    setDisplayTutorial: (value: boolean) => void;
+    // eslint-disable-next-line no-unused-vars
+    setDisplayTutorial: (_value: boolean) => void;
 }
 
+// eslint-disable-next-line no-unused-vars
 let startTime = new Date(0);
 
-const Traduction = ({setDisplayTutorial}: Props) => {
+const Traduction = ({ setDisplayTutorial }: Props) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const rafRef = useRef<number>();
@@ -30,7 +31,7 @@ const Traduction = ({setDisplayTutorial}: Props) => {
     const [recognizer, setRecognizer] = useState<any | null>(null);
     const [gesture, setGesture] = useState("");
     const [score, setScore] = useState(0);
-    const [showLandmarks, setShowLandmarks] = useState(true);
+    const showLandmarks = true;
     const showRef = useRef(showLandmarks);
 
     const [pictureURL, setPictureURL] = useState("");
@@ -39,7 +40,7 @@ const Traduction = ({setDisplayTutorial}: Props) => {
 
     const [signedLetters, setSignedLetters] = useState<{ letter: string, timestamp: number, className: string }[]>([]);
     const [currentLetter, setCurrentLetter] = useState<string>('');
-    
+
     // New state for tutorial and CGU display
     const [showCGU, setShowCGU] = useState<boolean>(false);
 
@@ -119,7 +120,7 @@ const Traduction = ({setDisplayTutorial}: Props) => {
 
     // Prediction loop
     const loop = useCallback(() => {
-        const video = videoRef.current!;
+        // const video = videoRef.current!;
         const canvas = canvasRef.current!;
         const ctx = canvas.getContext("2d")!;
 
@@ -272,7 +273,7 @@ const Traduction = ({setDisplayTutorial}: Props) => {
     return (
         <div className="traduction-container">
             {showCGU && <CGU onClose={handleCloseCGU} />}
-            
+
             <video
                 ref={videoRef}
                 className="signlang_video"
@@ -298,11 +299,12 @@ const Traduction = ({setDisplayTutorial}: Props) => {
                     right: 10,
                     width: "15%",
                     backgroundColor: "white",
-                    display: "flex",
+                    display: isPhone ? "none": "flex",
                     flexDirection: "row",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: 0
+                    padding: 0,
+                    
                 }}
                     id="start-btn"
                 >
@@ -365,23 +367,23 @@ const Traduction = ({setDisplayTutorial}: Props) => {
                         )}
                     </div>
                 )}
-                
+
                 {/* Bottom left buttons */}
-                <div className="helpersDiv" style={{ display: running ? "none" : "block" }}>
-                    <button 
-                        onClick={handleShowTutorial}    
-                        className="start-btn"                        
+                <div className="helpersDiv" style={{ display: running ? "none" : "block", textAlign: "end" }}>
+                    <button
+                        onClick={handleShowTutorial}
+                        className="start-btn"
                     >
                         ?
                     </button>
-                    <button 
+                    <br />
+                    <button
                         onClick={handleShowCGU}
-                        className="start-btn"                        
-
+                        className="start-btn"
                     >
                         CGU
                     </button>
-                </div>               
+                </div>
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import tutorialCarousel, { TutorialCarouselInterface } from './tutorialCarousel';
+import tutorialCarousel from './tutorialCarousel';
 
 // Import Swiper components and modules for the carousel functionality
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -47,7 +47,7 @@ export const TraductionTutorial = ({ onClose }: Props) => {
         };
 
         handleResize(); // Initial size check on component mount
-        
+
         // Set up event listener for window resizing
         window.addEventListener('resize', handleResize);
 
@@ -60,98 +60,120 @@ export const TraductionTutorial = ({ onClose }: Props) => {
     return (
         <section>
             {/* Main container with responsive width */}
-            <div style={{ width: "90%", margin: "0 auto", marginTop: 20 }}>
-                {/* Swiper carousel configuration */}
-                <Swiper
-                    navigation={true} // Enable next/prev navigation arrows
-                    modules={[Navigation]} // Add navigation module
-                    id="swipper-box"
-                    style={{ height: "auto" }}
-                    className="tutorial-swiper" // Custom class for styling navigation arrows
-                >
-                    {/* Map through tutorial items from imported carousel data */}
-                    {tutorialCarousel && tutorialCarousel.map((item, index) => {
-                        return (
-                            <SwiperSlide 
-                                key={index} 
-                                style={{
-                                    paddingBottom: "60px",
-                                    paddingLeft: "40px",
-                                    paddingRight: "40px"
-                                }}
-                            >
-                                {/* Slide title */}
-                                <h1 style={{ textAlign: "center", fontSize: 24, marginBottom: 10 }}>
-                                    {item.title}
-                                </h1>
-                                
-                                {/* Image container with responsive sizing */}
-                                <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-                                    <img 
-                                        style={{
-                                            height: imageHeight, // Dynamic height based on screen size
-                                            width: 'auto',
-                                            maxWidth: "100%",
-                                            objectFit: 'contain' // Maintain aspect ratio
-                                        }} 
-                                        src={item.picture} 
-                                        alt={item.title} 
-                                    />
-                                </div>
-                                
-                                {/* Description text - using dangerouslySetInnerHTML to render HTML from tutorial data */}
-                                <p
-                                    style={{ textAlign: "center", marginTop: 10 }}
-                                    dangerouslySetInnerHTML={{ __html: item.description }}
-                                />
-                            </SwiperSlide>
-                        )
-                    })}
-                </Swiper>
+            <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 1000
+            }}>
+                <div style={{
+                    backgroundColor: 'white',
+                    padding: '2rem',
+                    borderRadius: '10px',
+                    maxWidth: '80%',
+                    maxHeight: '80%',
+                    overflow: 'auto',
+                    position: 'relative'
+                }}>
+                    {/* Swiper carousel configuration */}
+                    <Swiper
+                        navigation={true} // Enable next/prev navigation arrows
+                        modules={[Navigation]} // Add navigation module
+                        id="swipper-box"
+                        style={{ height: "auto" }}
+                        className="tutorial-swiper" // Custom class for styling navigation arrows
+                    >
+                        {/* Map through tutorial items from imported carousel data */}
+                        {tutorialCarousel && tutorialCarousel.map((item, index) => {
+                            return (
+                                <SwiperSlide
+                                    key={index}
+                                    style={{
+                                        paddingLeft: "40px",
+                                        paddingRight: "40px"
+                                    }}
+                                >
+                                    {/* Slide title */}
+                                    <h1 style={{ textAlign: "center", fontSize: 24, marginBottom: 10 }}>
+                                        {item.title}
+                                    </h1>
 
-                {/* 
+                                    {/* Image container with responsive sizing */}
+                                    <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+                                        <img
+                                            style={{
+                                                height: imageHeight, // Dynamic height based on screen size
+                                                width: 'auto',
+                                                maxWidth: "100%",
+                                                objectFit: 'contain' // Maintain aspect ratio
+                                            }}
+                                            src={item.picture}
+                                            alt={item.title}
+                                        />
+                                    </div>
+
+                                    {/* Description text - using dangerouslySetInnerHTML to render HTML from tutorial data */}
+                                    <p
+                                        style={{ textAlign: "center", marginTop: 10 }}
+                                        dangerouslySetInnerHTML={{ __html: item.description }}
+                                    />
+                                </SwiperSlide>
+                            )
+                        })}
+                    </Swiper>
+
+                    {/* 
                  * Custom CSS for styling Swiper navigation arrows
                  * Uses :global() to target Swiper's generated classes
                  * Provides responsive styling for mobile view
                  */}
-                <style >{`
-                    :global(.tutorial-swiper .swiper-button-next),
-                    :global(.tutorial-swiper .swiper-button-prev) {
-                        background-color: rgba(255, 255, 255, 0.7);
-                        width: 30px;
-                        height: 30px;
-                        border-radius: 50%;
-                        color: #000;
-                    }
-
-                    :global(.tutorial-swiper .swiper-button-next:after),
-                    :global(.tutorial-swiper .swiper-button-prev:after) {
-                        font-size: 16px;
-                        font-weight: bold;
-                    }
-
-                    @media (max-width: 768px) {
-                        :global(.tutorial-swiper .swiper-button-next) {
-                        right: 5px;
-                        }
-
+                    <style >
+                    {`
+                        :global(.tutorial-swiper .swiper-button-next),
                         :global(.tutorial-swiper .swiper-button-prev) {
-                        left: 5px;
+                            background-color: rgba(255, 255, 255, 0.7);
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50%;
+                            color: #000;
                         }
-                    }
-                    `}
-                </style>
 
-                {/* "Skip tutorial" button container */}
-                <div style={{ textAlign: "center", marginTop: 20, marginBottom: 30 }}>
-                    <button
-                        onClick={onClose} // Calls the provided onClose callback
-                        className="start-btn"
-                    >
-                        Passer le tutoriel {/* French text for "Skip tutorial" */}
-                    </button>
+                        :global(.tutorial-swiper .swiper-button-next:after),
+                        :global(.tutorial-swiper .swiper-button-prev:after) {
+                            font-size: 16px;
+                            font-weight: bold;
+                        }
+
+                        @media (max-width: 768px) {
+                            :global(.tutorial-swiper .swiper-button-next) {
+                            right: 5px;
+                            }
+
+                            :global(.tutorial-swiper .swiper-button-prev) {
+                            left: 5px;
+                            }
+                        }
+                    `}
+                    </style>
+
+                    {/* "Skip tutorial" button container */}
+                    <div style={{ textAlign: "center", marginTop: 20, marginBottom: 30 }}>
+                        <button
+                            onClick={onClose} // Calls the provided onClose callback
+                            className="start-btn"
+                        >
+                            Passer le tutoriel {/* French text for "Skip tutorial" */}
+                        </button>
+                    </div>
                 </div>
             </div>
+
         </section>
     );
 };

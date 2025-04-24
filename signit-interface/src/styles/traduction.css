@@ -8,6 +8,9 @@
 
 .traduction-container {
   position: relative;
+  height: 100vh !important;
+  overflow-y: hidden; /* Allow vertical scrolling */
+  -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
 }
 
 .signlang_video {
@@ -375,4 +378,50 @@ input:checked+.slider:before {
     width: 100%;
     height: auto;
   }
+  
+  /* Mobile-specific styles */
+ /*  .traduction-container {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .controls {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .info {
+    position: relative;
+    margin-top: 20px;
+  } */
+  
+  /* Fix for iOS Safari */
+  @supports (-webkit-touch-callout: none) {
+    .traduction-container {
+      height: -webkit-fill-available !important;
+    }
+  }
 }
+
+/* Separate media query for portrait orientation */
+/* @media screen and (max-width: 768px) and (orientation: portrait) {
+  .traduction-container {
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .controls {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .info {
+    position: relative;
+    margin-top: 20px;
+  }
+} */
