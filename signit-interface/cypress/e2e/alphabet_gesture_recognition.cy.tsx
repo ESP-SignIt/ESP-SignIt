@@ -3,9 +3,14 @@ describe('Alphabet Letter Gesture Recognition', () => {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXY'.split('');
   const results: { letter: string; detectedLetter: string; score: string }[] = [];
 
+    
     it(`should init website`, () => {
-      cy.visit('/'); // Assuming the app is running on the root URL
-      cy.get('.switch').click() // Select video input
+      cy.visit('/', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('skipTutorial', 'true')
+        win.localStorage.setItem('cguAccepted', 'true')
+      }
+      }) 
 
       cy.get('button#start-btn').click(); // Start the recognition
 
@@ -13,12 +18,16 @@ describe('Alphabet Letter Gesture Recognition', () => {
     })
   letters.forEach(letter => {
     it(`should recognize letter ${letter}`, () => {
-      cy.visit('/'); // Assuming the app is running on the root URL 
+      cy.visit('/', {
+        onBeforeLoad(win) {
+          win.localStorage.setItem('skipTutorial', 'true')
+          win.localStorage.setItem('cguAccepted', 'true') 
+        }
+        })  
       cy.get('.switch').click() // Select video input
       cy.get('.signlang_video').invoke('attr', 'srcObject', null)
       cy.get('.signlang_video').invoke('attr', 'src', `/video/${letter}.mp4`).then((video)=>{
-
-        console.log(video)
+ 
         cy.wait(3000); // Adjust the wait time as needed
         // Wait for the video to start playing
         // Adjust the wait time as needed
