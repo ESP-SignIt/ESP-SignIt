@@ -1,14 +1,33 @@
+/**
+ * Tutorial Carousel Component
+ * 
+ * This file defines the data structure and content for the tutorial carousel
+ * that guides users through the initial setup and usage of the ESP-SignIt application.
+ * It imports tutorial images and exports a structured array of tutorial steps.
+ */
+
 // Pictures imports
 import tutorialImage1 from '../../../assets/tutorialPictures/tutorial-1.png';
 import tutorialImage2 from '../../../assets/tutorialPictures/tutorial-2.png';
 import tutorialImage3 from '../../../assets/tutorialPictures/tutorial-3.png';
 
+/**
+ * Interface defining the structure of each tutorial step
+ * @property {string} title - The title of the tutorial step
+ * @property {string} picture - The image path for the tutorial step
+ * @property {string} description - The detailed description of the tutorial step
+ */
 export interface TutorialCarouselInterface {
     title: string;
     picture: string;
     description: string;
 }
 
+/**
+ * Array containing all tutorial steps for the carousel
+ * Each step includes a title, picture, and description
+ * The descriptions use HTML tags for formatting
+ */
 export const tutorialCarousel: TutorialCarouselInterface[] = [
     {
         title: "Étape 1 sur 4 - Accès à la caméra",
