@@ -397,6 +397,7 @@ const Traduction = () => {
         </div>
 
     );
+    
 };
 
 export default Traduction;

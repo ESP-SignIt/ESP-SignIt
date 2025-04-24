@@ -38,5 +38,6 @@ public class WebcamTextureAssigner : MonoBehaviour
  
         //here we have the texture. Assign it to the main texture of the main material of the renderer
         GetComponent<Renderer>().material.mainTexture = webCamTexture;
+        
     }
 }
