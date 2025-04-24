@@ -7,14 +7,14 @@ export default defineConfig({
       const letter = process.env.CYPRESS_VIDEO_LETTER || "A";
       // Add Chrome flags for using fake video file
       on("before:browser:launch", (browser, launchOptions) => {
-        if (browser.name === "chrome") {
-          launchOptions.args.push(
-            "--use-fake-ui-for-media-stream",
-            "--use-fake-device-for-media-stream",
-            `--use-file-for-fake-video-capture=cypress/dataset/video/A.mjpeg`
-          );
-        }
-        return launchOptions;
+        // if (browser.name === "chrome") {
+        //   launchOptions.args.push(
+        //     "--use-fake-ui-for-media-stream",
+        //     "--use-fake-device-for-media-stream",
+        //     `--use-file-for-fake-video-capture=cypress/dataset/video/A.mjpeg`
+        //   );
+        // }
+        // return launchOptions;
       });
       // implement node event listeners here
       config.env.currentLetter = letter;
