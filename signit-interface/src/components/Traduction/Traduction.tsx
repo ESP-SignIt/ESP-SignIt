@@ -7,6 +7,22 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import "../../styles/traduction.css";
 import imageList, { ImageList } from "../ImageAlphabet/imageList";
 
+/* Stream Unity */
+import { Signaling, WebSocketSignaling } from "../Signaling/signaling";
+import { getServerConfig, getRTCConfiguration } from "../Signaling/config";
+// import Callbacks from 
+import { RenderStreaming } from "../Signaling/renderstreaming";
+import { VideoPlayer } from "../Signaling/videoplayer";
+
+/** @type {RenderStreaming} */
+let renderstreaming: RenderStreaming;
+/** @type {boolean} */
+let useWebSocket: boolean;
+const videoPlayer = new VideoPlayer();
+const playerDiv = document.getElementById('player')!;
+const lockMouseCheck = document.getElementById('lockMouseCheck') as HTMLInputElement;
+
+
 let startTime = new Date(0);
 
 const Traduction = () => {
@@ -222,8 +238,243 @@ useEffect(() => {
         setPictureURL(imageList[newIndex].src);
     };
 
+    /* Testing stream from unity */
+
+    type SignalingMessage = {
+        // type: 'offer' | 'answer' | 'candidate' | string;
+        // [key: string]: any;
+        type: string;  // e.g., 'offer', 'answer', 'candidate'
+        sdp?: string;
+        candidate?: RTCIceCandidateInit;
+      };
+
+    interface Callbacks {
+    onConnect?: () => void;
+    onDisconnect?: () => void;
+    onOffer?: (msg: SignalingMessage) => void;
+    onAnswer?: (msg: SignalingMessage) => void;
+    onCandidate?: (msg: RTCIceCandidateInit) => void;
+    onTrackEvent?: (data: RTCTrackEvent) => void;  // Add this line
+    onGotOffer?: (offer: RTCSessionDescriptionInit) => void;
+    }
+
+    async function setup() {
+        const res = await getServerConfig();
+        useWebSocket = res.useWebSocket;
+      }
+      
+    
+    const UnityStream = () => {
+
+        setup();
+
+        // const videoRef = useRef<HTMLVideoElement | null>(null);
+        // const peerRef = useRef<RTCPeerConnection | null>(null);
+      
+        // useEffect(() => {
+        //   const signaling = new WebSocketSignaling('ws:///192.168.56.17:80', {
+        //     onOffer: async (msg) => {
+        //       // 👇 Convert the incoming signaling message to RTCSessionDescriptionInit
+        //       const offer: RTCSessionDescriptionInit = {
+        //         type: msg.type as RTCSdpType, // 'offer'
+        //         sdp: msg.sdp,
+        //       };
+      
+        //       const pc = new RTCPeerConnection();
+        //       peerRef.current = pc;
+      
+        //       pc.ontrack = (event) => {
+        //         if (videoRef.current) {
+        //           videoRef.current.srcObject = event.streams[0];
+        //         }
+        //       };
+      
+        //       await pc.setRemoteDescription(new RTCSessionDescription(offer));
+        //       const answer = await pc.createAnswer();
+        //       await pc.setLocalDescription(answer);
+      
+        //       signaling.send({
+        //         type: 'answer',
+        //         sdp: answer.sdp,
+        //       });
+        //     }
+        //   });
+
+      
+        //   return () => {
+        //     if (peerRef.current) peerRef.current.close();
+        //     signaling.close(); // Always good to clean up
+        //   };
+        // }, []);
+
+        /* Version 2 */
+
+        // const videoRef = useRef<HTMLVideoElement | null>(null);
+        const peerRef = useRef<RTCPeerConnection | null>(null);
+        const signalingRef = useRef<WebSocketSignaling | null>(null);
+
+        const onConnect = () => {
+            console.log("Connected to Unity");
+          };
+        
+          const onDisconnect = () => {
+            console.log("Disconnected from Unity");
+          };
+        
+          const setCodecPreferences = (offer: RTCSessionDescriptionInit) => {
+            console.log("Setting codec preferences", offer);
+            // Here you can set codec preferences for the WebRTC connection if needed
+          };
+        
+          const handleTrackEvent = (data: RTCTrackEvent) => {
+            if (videoRef.current) {
+              // Add the video track to the video element
+              videoRef.current.srcObject = data.streams[0];
+            }
+          };
+
+        const [ws, setWs] = useState<WebSocket | null>(null);
+        const [response, setResponse] = useState('');
+        //setupRenderStreaming();
+        
+          useEffect(() => {
+            const playerDiv = document.getElementById('player');
+            //const signaling = new WebSocketSignaling('ws://192.168.56.17:80');
+
+            const socket = new WebSocket('ws://192.168.56.17:80');
+
+            socket.onopen = () => {
+            //console.log('Connected to WebSocket server');
+            // socket.send('Hello from React');
+            };
+
+            socket.onmessage = (event) => {
+            console.log('Received:', event.data);
+            setResponse(event.data);
+            };
+
+            setWs(socket);
+
+                return () => {
+                socket.close();
+                };
+            }, []);
+            
+            // signaling.send = (msg: SignalingMessage) => {
+            //     console.log('Received offer:', msg);
+            //     const offer: RTCSessionDescriptionInit = {
+            //         type: msg.type as RTCSdpType, // Ensure correct type matching
+            //         sdp: msg.sdp ?? '', // Ensure `sdp` exists (could also handle null or undefined cases)
+            //     };
+
+            //     const pc = new RTCPeerConnection();
+        
+            //     peerRef.current = pc;
+                
+            //     //pc.ontrack = handleTrackEvent;
+            //     pc.ontrack = (event) => {
+            //         console.log('Track event received:', event);
+            //         if (event.streams[0]) {
+            //             console.log('Received stream:', event.streams[0]);
+            //             if (videoRef.current) {
+            //               videoRef.current.srcObject = event.streams[0];
+            //             }
+            //           }
+            //     };
+                
+            //     // Set the remote offer description
+            //     await pc.setRemoteDescription(new RTCSessionDescription(offer));
+
+            //     // Create an answer
+            //     const answer = await pc.createAnswer();
+            //     await pc.setLocalDescription(answer);
+        
+            //     signaling.send({
+            //       type: 'answer',
+            //       sdp: answer.sdp,
+            //     });
+            //   },
+
+            //   onConnect: onConnect,
+            //   onDisconnect: onDisconnect,
+            //   onTrackEvent: handleTrackEvent,
+            //   onGotOffer: setCodecPreferences,
+            // });
+        
+        //     signalingRef.current = signaling;
+        
+        //     return () => {
+        //       signalingRef.current?.close();
+        //       if (peerRef.current) peerRef.current.close();
+        //     };
+        //   }, []);
+    }
+
+    async function setupRenderStreaming() {
+    //   codecPreferences.disabled = true;
+      const signaling = useWebSocket ? new WebSocketSignaling() : new Signaling();
+      const config = getRTCConfiguration();
+      renderstreaming = new RenderStreaming(signaling, config);
+      renderstreaming.onConnect = onConnect;
+      renderstreaming.onDisconnect = onDisconnect;
+      renderstreaming.onTrackEvent = (data) => videoPlayer.addTrack(data.track);
+      renderstreaming.onGotOffer = setCodecPreferences;
+    
+      await renderstreaming.start();
+      await renderstreaming.createConnection("aaa");
+    }
+    
+    function onClickPlayButton() {
+        // add video player
+        videoPlayer.createPlayer(playerDiv, lockMouseCheck);
+        setupRenderStreaming();
+      }
+    
+    function onConnect() {
+        const channel = renderstreaming.createDataChannel("input");
+        videoPlayer.setupInput(channel);
+    }
+
+    async function onDisconnect() {
+        
+        await renderstreaming.stop();
+        // renderstreaming = null;
+        videoPlayer.deletePlayer();
+    }
+
+    function setCodecPreferences() {
+        /** @type {RTCRtpCodecCapability[] | null} */
+        let selectedCodecs = null;
+        // if (supportsSetCodecPreferences) {
+        //   const preferredCodec = codecPreferences.options[codecPreferences.selectedIndex];
+        //   if (preferredCodec.value !== '') {
+        //     const [mimeType, sdpFmtpLine] = preferredCodec.value.split(' ');
+        //     const { codecs } = RTCRtpSender.getCapabilities('video');
+        //     const selectedCodecIndex = codecs.findIndex(c => c.mimeType === mimeType && c.sdpFmtpLine === sdpFmtpLine);
+        //     const selectCodec = codecs[selectedCodecIndex];
+        //     selectedCodecs = [selectCodec];
+        //   }
+        // }
+      
+        if (selectedCodecs == null) {
+          return;
+        }
+        // const transceivers = renderstreaming.getTransceivers().filter(t => t.receiver.track.kind == "video");
+        // if (transceivers && transceivers.length > 0) {
+        //   transceivers.forEach(t => t.setCodecPreferences(selectedCodecs));
+        // }
+      }
+
+    
+
+    UnityStream();
+
+    /* End testing */
+
+
     return (
         <div className="traduction-container">
+            <div id="player"></div>
             <video
                 ref={videoRef}
                 className="signlang_video"
@@ -258,14 +509,25 @@ useEffect(() => {
                     id="start-btn"
                 >
                     <label className="switch">
-                        <input
+                            <input
                             type="checkbox"
                             checked={videoInput ? false : true}
-                            onChange={() => videoInput ? setVideoInput(null) : setVideoInput("/video/A2.mp4")}
+                            onChange={() => videoInput ? setVideoInput(null) : setVideoInput("http://192.168.56.17:80")}
+                            // onChange={() => videoInput ? setVideoInput("http://192.168.56.17:80") : setVideoInput("http://192.168.56.17:80")}
                         />
                         <span className="slider round"></span>
                     </label>
                     <span>Mode {videoInput ? "Video" : "Webcam"}</span>
+                    {/* <label className="switch">
+                            <input
+                            type="checkbox"
+                            checked={videoInput ? false : true}
+                            onChange={() => videoInput ? setVideoInput(null) : setVideoInput("http://192.168.56.17:80")}
+                            // onChange={() => videoInput ? setVideoInput("http://192.168.56.17:80") : setVideoInput("http://192.168.56.17:80")}
+                        />
+                        <span className="slider round"></span>
+                    </label>
+                    <span>Mode {videoInput ? "Video" : "Webcam"}</span> */}
                 </div>
                 {running && (
                     <div className="info">
