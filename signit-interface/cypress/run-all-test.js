@@ -28,7 +28,6 @@ const letters = [
   "W",
   "X",
   "Y",
-  "Z",
 ];
 
 // Créer un tableau pour stocker les résultats

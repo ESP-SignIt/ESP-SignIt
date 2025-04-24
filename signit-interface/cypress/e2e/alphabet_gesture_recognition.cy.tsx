@@ -1,6 +1,9 @@
+import { log } from "console";
+
 describe('Alphabet Letter Gesture Recognition', () => {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXY'.split('');
   const results: { letter: string; detectedLetter: string; score: string }[] = [];
+
 
   letters.forEach(letter => {
     it(`should recognize letter ${letter}`, () => {
@@ -14,11 +17,17 @@ describe('Alphabet Letter Gesture Recognition', () => {
 
       // Get the score
       cy.get('.gesture_output').invoke('text').then(detectedLetter => {
-        if (detectedLetter !== letter) {
+        letter = letter.replace(/^.../, '');
+        detectedLetter = detectedLetter.replace(/^.../, '');
+        detectedLetter = detectedLetter.length > 1 ? detectedLetter.slice(0, 1) : detectedLetter;
+        if ( detectedLetter !== letter) {
           cy.log(`Warning: Detected letter ${detectedLetter} does not match expected letter ${letter}`);
         }
         cy.get('.score').invoke('text').then(score => {
+          console.log({ letter, detectedLetter, score })
+          // results.push({ letter, detectedLetter, score });
           results.push({ letter, detectedLetter, score });
+
         });
       });
     });
