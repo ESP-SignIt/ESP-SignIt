@@ -361,10 +361,6 @@ input:checked+.slider:before {
     width: 20%;
   }
 
-  .signlang_canvas {
-    width: 30% !important;
-  }
-
   #start-btn>span {
     display: none;
   }
@@ -425,3 +421,69 @@ input:checked+.slider:before {
     margin-top: 20px;
   }
 } */
+
+/* Learning progress styles */
+.learning-progress {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 600px;
+    margin-top: 0;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    color: white;
+    z-index: 100;
+}
+
+.learning-progress-phone {
+  position: absolute;
+  bottom: 10%;
+  left: 0%;
+  width: 50%;
+  max-width: 600px;
+  text-align: center;
+  margin-top: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  color: white;
+  z-index: 100;
+}
+
+.learning-progress h3 {
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+.letter-progress {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.letter-item {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.letter-item.current {
+    background-color: #4a90e2;
+    box-shadow: 0 0 5px #4a90e2;
+}
+
+.letter-item.success {
+    background-color: #1DB954;
+}
+
+.letter-item.failed {
+    background-color: #e74c3c;
+}

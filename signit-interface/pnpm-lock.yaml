@@ -52,7 +52,10 @@ importers:
         version: 16.18.126
       '@types/react':
         specifier: ^18.0.0
-        version: 18.3.20
+        version: 18.3.18
+      '@types/react-alert':
+        specifier: ^7.0.6
+        version: 7.0.6
       '@types/react-dom':
         specifier: ^18.0.0
         version: 18.3.6(@types/react@18.3.20)
@@ -80,6 +83,12 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
+      react-alert:
+        specifier: ^7.0.3
+        version: 7.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-alert-template-basic:
+        specifier: ^1.0.2
+        version: 1.0.2(react@18.3.1)
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
@@ -1543,8 +1552,12 @@ packages:
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
 
-  '@types/react-dom@18.3.6':
-    resolution: {integrity: sha512-nf22//wEbKXusP6E9pfOCDwFdHAX4u172eaJI4YkDRQEZiorm6KfYnSC2SWLDMVWUOWPERmJnN0ujeAfTBLvrw==}
+  '@types/react-alert@7.0.6':
+    resolution: {integrity: sha512-e6jjMurpoTVa8MXUbb1r/M1Rnn+eNxa1Ayhf77yeHtPbfu30x55Y6KMYVWSLUg/SQOgN3TguhDNQ6Qqu1gnkLw==}
+
+  '@types/react-dom@18.3.5':
+    resolution: {integrity: sha512-P4t6saawp+b/dFrUr2cvkVsfvPguwsxtH6dNIYRllMsefqFzkZk5UIjzyDOv5g1dXIPdG4Sp1yCR4Z6RCUsG/Q==}
+
     peerDependencies:
       '@types/react': ^18.0.0
 
@@ -5051,6 +5064,17 @@ packages:
     resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}
     engines: {node: '>= 0.8'}
 
+  react-alert-template-basic@1.0.2:
+    resolution: {integrity: sha512-nJSIknM5xN/GzKdKkb5/X9zdiLxSqctww3mEouyeR891nUGP8guqFpCGD8vCjFYSZtq8z3tGcAKBG1XjtLHFHQ==}
+    peerDependencies:
+      react: ^16.2.0 || ^17
+
+  react-alert@7.0.3:
+    resolution: {integrity: sha512-cZ2ZhxytECTxljDfBKpQmwWbfJQFzFf2Qf03L/IB5shbEXtWhDD2JjiW60rwmKT1oZoU+GEnUQw5MFM5+f0B6A==}
+    peerDependencies:
+      react: ^16.8.1 || ^17
+      react-dom: ^16.8.1 || ^17
+
   react-app-polyfill@3.0.0:
     resolution: {integrity: sha512-sZ41cxiU5llIB003yxxQBYrARBqe0repqPTTYBTmMqTz9szeBbE37BehCE891NZsmdZqqP+xWKdT3eo3vOzN8w==}
     engines: {node: '>=14'}
@@ -8035,7 +8059,12 @@ snapshots:
 
   '@types/range-parser@1.2.7': {}
 
-  '@types/react-dom@18.3.6(@types/react@18.3.20)':
+  '@types/react-alert@7.0.6':
+    dependencies:
+      '@types/react': 18.3.18
+
+  '@types/react-dom@18.3.5(@types/react@18.3.18)':
+
     dependencies:
       '@types/react': 18.3.20
 
@@ -12186,6 +12215,17 @@ snapshots:
       http-errors: 2.0.0
       iconv-lite: 0.4.24
       unpipe: 1.0.0
+
+  react-alert-template-basic@1.0.2(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+
+  react-alert@7.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-transition-group: 4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   react-app-polyfill@3.0.0:
     dependencies:

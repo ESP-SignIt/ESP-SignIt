@@ -34,9 +34,19 @@ export const Navbar = () => {
                 <Link
                     to="/"
                     title="SignIt - Traduction"
-                    className={!location.pathname.startsWith('/dictionary') ? 'nav-link-selected' : 'nav-link'}
+                    className={'nav-link-selected'}
                 >
                     Traduction
+                </Link>
+            </div>
+            <br />
+            <div className="flex margin-right">
+                <Link
+                    to="/learn"
+                    title="SignIt - Apprendre"
+                    className={'nav-link-selected'}
+                >
+                    Apprentissage
                 </Link>
             </div>
         </section>
