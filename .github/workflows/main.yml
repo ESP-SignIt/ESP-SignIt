@@ -13,15 +13,17 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           # Disable running of tests within install job
+          project: ./signit-interface
           runTests: false
           build: npm run build
+
 
       - name: Save build folder
         uses: actions/upload-artifact@v4
         with:
           name: build
           if-no-files-found: error
-          path: build
+          path: ./signit-interface/build
 
   cypress-run:
     runs-on: ubuntu-24.04
@@ -34,10 +36,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: build
+          path: ./signit-interface/build
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          project: ./signit-interface
           start: npm start
           browser: chrome
