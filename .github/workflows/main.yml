@@ -1,7 +1,9 @@
 name: Cypress Tests with Dependency and Artifact Caching
 
 on: push
-
+defaults:
+  run:
+    working-directory: ./scripts
 jobs:
   install:
     runs-on: ubuntu-24.04
@@ -19,12 +21,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: ./signit-interface
 
-      - name: Cypress install
-        uses: cypress-io/github-action@v6
+      - name: Cypress Build
+        uses: cypress-io/github-action@v6 
         with:
-          project: ./signit-interface
           runTests: false
           build: pnpm run build
 
