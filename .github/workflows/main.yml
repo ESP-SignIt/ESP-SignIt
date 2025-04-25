@@ -23,8 +23,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
-          cache-dependency-path: ./signit-interface/pnpm-lock.yaml
+
+      - name: Install Cypress Globally
+        run: npm install -g cypress  
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
