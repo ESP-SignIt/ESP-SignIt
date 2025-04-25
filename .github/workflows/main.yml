@@ -28,10 +28,11 @@ jobs:
         run: npm install -g cypress  
 
       - name: Cypress run
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v6          
+        env: 
+            CI: false
         with:
           working-directory: ./signit-interface
-          env: CI=false
           build: pnpm build
           start: pnpm start
           browser: chrome
