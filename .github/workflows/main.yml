@@ -9,14 +9,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ./signit-interface
+
       - name: Cypress install
         uses: cypress-io/github-action@v6
         with:
-          # Disable running of tests within install job
           project: ./signit-interface
           runTests: false
-          build: npm run build
-
+          build: pnpm run build
 
       - name: Save build folder
         uses: actions/upload-artifact@v4
@@ -32,6 +43,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: ./signit-interface
+
       - name: Download the build folder
         uses: actions/download-artifact@v4
         with:
@@ -42,5 +66,5 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           project: ./signit-interface
-          start: npm start
+          start: pnpm start
           browser: chrome
