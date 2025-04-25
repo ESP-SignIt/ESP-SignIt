@@ -33,6 +33,6 @@ jobs:
             CI: false
         with:
           working-directory: ./signit-interface
-          build: pnpm build
+          build: CI='' pnpm build
           start: pnpm start
           browser: chrome
