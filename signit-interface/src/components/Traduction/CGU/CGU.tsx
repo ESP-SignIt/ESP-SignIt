@@ -213,6 +213,7 @@ const CGU = ({ onClose }: Props) => {
                             disabled={wasAccepted}
                             onChange={(e) => setIsAccepted(e.target.checked)}
                             style={{ cursor: 'pointer' }}
+                            className="checkboxCGU"
                         />
                         J'ai lu et j'accepte les Conditions Générales d'Utilisation
                     </label>
