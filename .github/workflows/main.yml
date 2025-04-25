@@ -23,11 +23,7 @@ jobs:
         run: pnpm install
 
       - name: Cypress Build
-        uses: cypress-io/github-action@v6 
-        with:
-          runTests: false
-          build: pnpm run build
-          project: ./signit-interface
+        run : pnpm run build
 
       - name: Save build folder
         uses: actions/upload-artifact@v4
