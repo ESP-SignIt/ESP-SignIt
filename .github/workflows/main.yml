@@ -3,7 +3,7 @@ name: Cypress Tests with Dependency and Artifact Caching
 on: push
 defaults:
   run:
-    working-directory: ./scripts
+    working-directory: ./signit-interface
 jobs:
   install:
     runs-on: ubuntu-24.04
