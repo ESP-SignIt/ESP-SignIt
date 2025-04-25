@@ -44,8 +44,14 @@ cypress/videos/
 cypress/results/
 cypress/dataset/
 
+# Python
+.venv/
+__pycache__/
+venv/
+.python-version
+
 # Ignorer le dataset
-Etat de l'art/Pôle IA/Code For Training the Model/DATASET_mixed/
+Etat de l'art/Pôle IA/Code For Training the Model/DATASET_*
 
 # Client secrets
 Etat de l'art/Pôle IA/Code For Training the Model/client_secrets.json

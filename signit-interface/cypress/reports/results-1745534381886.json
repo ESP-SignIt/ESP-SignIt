@@ -1,0 +1,129 @@
+{
+  "results": [
+    {
+      "letter": "A",
+      "detectedLetter": "AA",
+      "score": "61%"
+    },
+    {
+      "letter": "B",
+      "detectedLetter": "BB",
+      "score": "96%"
+    },
+    {
+      "letter": "C",
+      "detectedLetter": "CC",
+      "score": "91%"
+    },
+    {
+      "letter": "D",
+      "detectedLetter": "DD",
+      "score": "89%"
+    },
+    {
+      "letter": "E",
+      "detectedLetter": "EE",
+      "score": "97%"
+    },
+    {
+      "letter": "F",
+      "detectedLetter": "FF",
+      "score": "64%"
+    },
+    {
+      "letter": "G",
+      "detectedLetter": "GG",
+      "score": "86%"
+    },
+    {
+      "letter": "H",
+      "detectedLetter": "HH",
+      "score": "98%"
+    },
+    {
+      "letter": "I",
+      "detectedLetter": "II",
+      "score": "81%"
+    },
+    {
+      "letter": "J",
+      "detectedLetter": "JJ",
+      "score": "70%"
+    },
+    {
+      "letter": "K",
+      "detectedLetter": "KK",
+      "score": "59%"
+    },
+    {
+      "letter": "L",
+      "detectedLetter": "LL",
+      "score": "89%"
+    },
+    {
+      "letter": "M",
+      "detectedLetter": "MM",
+      "score": "71%"
+    },
+    {
+      "letter": "N",
+      "detectedLetter": "NN",
+      "score": "56%"
+    },
+    {
+      "letter": "O",
+      "detectedLetter": "OO",
+      "score": "66%"
+    },
+    {
+      "letter": "P",
+      "detectedLetter": "...",
+      "score": "--%"
+    },
+    {
+      "letter": "Q",
+      "detectedLetter": "QQ",
+      "score": "79%"
+    },
+    {
+      "letter": "R",
+      "detectedLetter": "...",
+      "score": "--%"
+    },
+    {
+      "letter": "S",
+      "detectedLetter": "SS",
+      "score": "92%"
+    },
+    {
+      "letter": "T",
+      "detectedLetter": "TT",
+      "score": "76%"
+    },
+    {
+      "letter": "U",
+      "detectedLetter": "UU",
+      "score": "73%"
+    },
+    {
+      "letter": "V",
+      "detectedLetter": "VV",
+      "score": "87%"
+    },
+    {
+      "letter": "W",
+      "detectedLetter": "WW",
+      "score": "92%"
+    },
+    {
+      "letter": "X",
+      "detectedLetter": "XX",
+      "score": "85%"
+    },
+    {
+      "letter": "Y",
+      "detectedLetter": "YY",
+      "score": "68%"
+    }
+  ]
+}

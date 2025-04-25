@@ -1,0 +1,38 @@
+name: Cypress Tests with Dependency and Artifact Caching
+
+on: push
+defaults:
+  run:
+    working-directory: ./signit-interface
+jobs:
+  cypress-run:
+    runs-on: ubuntu-24.04
+    container:
+      image: cypress/browsers:latest
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Cypress Globally
+        run: npm install -g cypress
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        env:
+          CI: false
+        with:
+          working-directory: ./signit-interface
+          build: pnpm build
+          start: pnpm start
+          browser: chrome
