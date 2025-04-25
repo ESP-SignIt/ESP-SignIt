@@ -13,20 +13,15 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 10
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: pnpm install 
-
-      - name: Download the build folder
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: ./signit-interface/build
+          node-version: 22
+          cache: 'pnpm'
+          cache-dependency-path: ./signit-interface/pnpm-lock.yaml
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
