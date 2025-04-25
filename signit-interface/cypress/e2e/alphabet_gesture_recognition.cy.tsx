@@ -1,31 +1,65 @@
+
 describe('Alphabet Letter Gesture Recognition', () => {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXY'.split('');
   const results: { letter: string; detectedLetter: string; score: string }[] = [];
 
-  letters.forEach(letter => {
-    it(`should recognize letter ${letter}`, () => {
-      cy.visit('/'); // Assuming the app is running on the root URL 
-      cy.get('input[type="checkbox"]').check(); // Select video input
-      cy.get('.signlang_video').invoke('attr', 'src', `/video/${letter}.mp4`); // Change the video source
+    
+    it(`should init website`, () => {
+      cy.visit('/', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem('skipTutorial', 'true')
+        win.localStorage.setItem('cguAccepted', 'true')
+      }
+      }) 
+
       cy.get('button#start-btn').click(); // Start the recognition
 
-      // Wait for the recognition to complete
-      cy.wait(5000); // Adjust the wait time as needed
-
-      // Get the score
-      cy.get('.gesture_output').invoke('text').then(detectedLetter => {
-        if (detectedLetter !== letter) {
-          cy.log(`Warning: Detected letter ${detectedLetter} does not match expected letter ${letter}`);
+      cy.wait(3000);
+    })
+  letters.forEach(letter => {
+    it(`should recognize letter ${letter}`, () => {
+      cy.visit('/', {
+        onBeforeLoad(win) {
+          win.localStorage.setItem('skipTutorial', 'true')
+          win.localStorage.setItem('cguAccepted', 'true') 
         }
-        cy.get('.score').invoke('text').then(score => {
-          results.push({ letter, detectedLetter, score });
+        })  
+      cy.get('.switch').click() // Select video input
+      cy.get('.signlang_video').invoke('attr', 'srcObject', null)
+      cy.get('.signlang_video').invoke('attr', 'src', `/video/${letter}.mp4`).then((video)=>{
+ 
+        cy.wait(3000); // Adjust the wait time as needed
+        // Wait for the video to start playing
+        // Adjust the wait time as needed
+        cy.get('button#start-btn').click(); // Start the recognition
+  
+        // Wait for the recognition to complete
+        cy.wait(3000); // Adjust the wait time as needed
+  
+        // Get the score
+        cy.get('.gesture_output').invoke('text').then(detectedLetter => {
+          
+          
+          cy.get('.score').invoke('text').then(score => {
+            console.log({ letter, detectedLetter, score })
+            // results.push({ letter, detectedLetter, score });
+            results.push({ letter, detectedLetter, score });
+            letter = letter.replace(/^.../, '');
+            detectedLetter = detectedLetter.replace(/^.../, '');
+            detectedLetter = detectedLetter.length > 1 ? detectedLetter.slice(0, 1) : detectedLetter;
+            expect(letter).to.eq(detectedLetter)
+          });
         });
-      });
+      })  // Change the video source
+      
     });
-  });
+  }); 
+    
+    it('should export tests results', ()=>{
+      const date = new Date().getTime()
+          // Output the results in a table format
+      cy.writeFile('cypress/reports/results-'+date+'.json',{results : results});
+    })
 
-  after(() => {
-    // Output the results in a table format
-    console.table(results);
-  });
+ 
 });

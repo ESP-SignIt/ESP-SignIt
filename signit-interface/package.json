@@ -40,7 +40,9 @@
     "start": "react-scripts start",
     "lint": "eslint './src/**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint './src/**/*.{ts,tsx,js,jsx}' --fix",
-    "build": "CI=false react-scripts build"
+    "build": "CI=false react-scripts build",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run --browser=chrome"
   },
   "eslintConfig": {
     "extends": [
