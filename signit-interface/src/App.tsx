@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Loader from './components/Loader';
 
+
 // Import dynamique des pages
 const TraductionComponent = lazy(() => import('./components/Traduction/TraductionUI'));
-const DictionaryComponent = lazy(() => import('./components/Dictionary/Dictionary'));
+const LearningComponent = lazy(() => import('./components/Learn/LearningUI'));
 
 const App = () => {
   return (
@@ -14,7 +15,7 @@ const App = () => {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<TraductionComponent />} />
-          <Route path="/dictionary" element={<DictionaryComponent />} />
+          <Route path="/learn" element={<LearningComponent />} />
         </Routes>
       </Suspense>
     </Router>

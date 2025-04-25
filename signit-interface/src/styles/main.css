@@ -37,10 +37,10 @@ h1 {
 }
 
 section#navbar {
-  display: flex;
+  /* display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; */
   height: 5vh;
   position: fixed;
   background-color: transparent;

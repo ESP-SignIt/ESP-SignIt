@@ -1,34 +1,35 @@
-import {
-    DrawingUtils,
-    FilesetResolver,
-    GestureRecognizer
-} from "@mediapipe/tasks-vision";
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import "../../styles/traduction.css";
+import { FilesetResolver, GestureRecognizer, DrawingUtils } from "@mediapipe/tasks-vision";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import imageList, { ImageList } from "../ImageAlphabet/imageList";
-import CGU from './CGU/CGU';
+import "../../styles/traduction.css";
+
+import Words from "./words";
 
 import { useAlert } from "react-alert";
-
-
-interface Props {
-    // eslint-disable-next-line no-unused-vars
-    setDisplayTutorial: (_value: boolean) => void;
-}
 
 // eslint-disable-next-line no-unused-vars
 let startTime = new Date(0);
 
-const Traduction = ({ setDisplayTutorial }: Props) => {
+interface TranslatingState {
+    done: boolean;
+    letter: string;
+    success: boolean;
+}
+
+export const LearningUI = () => {
 
     const alert = useAlert();
+
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const rafRef = useRef<number>();
 
     const [isGoodLetter, setIsGoodLetter] = useState<boolean>(false);
+
+    // eslint-disable-next-line no-unused-vars
     const [selectedLetter, setSelectedLetter] = useState<string>("");
 
+    // eslint-disable-next-line no-unused-vars
     const [videoInput, setVideoInput] = useState<string | null>(null);
     const [running, setRunning] = useState(false);
     const [isReady, setIsReady] = useState(false);
@@ -45,8 +46,16 @@ const Traduction = ({ setDisplayTutorial }: Props) => {
     const [signedLetters, setSignedLetters] = useState<{ letter: string, timestamp: number, className: string }[]>([]);
     const [currentLetter, setCurrentLetter] = useState<string>('');
 
-    // New state for tutorial and CGU display
-    const [showCGU, setShowCGU] = useState<boolean>(false);
+    const [wordToTranslate, setWordToTranslate] = useState<string>('');
+    const [translating, setTranslating] = useState<Array<TranslatingState>>([]);
+
+    // eslint-disable-next-line no-unused-vars
+    const [currentLetterIndex, setCurrentLetterIndex] = useState<number>(-1);
+    const [isLearning, setIsLearning] = useState<boolean>(false);
+    const [selectedLetterIndex, setSelectedLetterIndex] = useState<number>(-1);
+
+    // eslint-disable-next-line no-unused-vars
+    const [wordCompleted, setWordCompleted] = useState<boolean>(false);
 
     // Load Mediapipe model
     useEffect(() => {
@@ -184,7 +193,15 @@ const Traduction = ({ setDisplayTutorial }: Props) => {
 
     // Toggle start/stop
     const onToggle = useCallback(() => {
-        setRunning((r) => !r);
+        setRunning((r) => {
+            // If you stop translating empty the word to translate 
+            if (r) {
+                setWordToTranslate("");
+                setCurrentLetterIndex(-1);
+                setTranslating([]);
+            }
+            return !r
+        });
         startTime = new Date();
     }, []);
 
@@ -192,14 +209,41 @@ const Traduction = ({ setDisplayTutorial }: Props) => {
     // lorsque currentLetter change. Chaque lettre est associée à un timestamp.
     // On ajoute la lettre seulement si elle reste la même pendant 0.5 seconde.
     useEffect(() => {
-        if (currentLetter) {
+        if (currentLetter && isLearning && selectedLetterIndex >= 0) {
             const timeoutId = setTimeout(() => {
                 setSignedLetters(prevLetters => [
                     ...prevLetters,
                     { letter: currentLetter, timestamp: Date.now(), className: 'signed' }
                 ]);
-                if (currentLetter == selectedLetter) {
-                    setIsGoodLetter(true);
+                
+                // Check if the current letter matches the expected letter
+                if (selectedLetterIndex >= 0 && selectedLetterIndex < translating.length) {
+                    const expectedLetter = translating[selectedLetterIndex].letter;
+                    
+                    if (currentLetter === expectedLetter) {
+                        setIsGoodLetter(true);
+                        // Mark the current letter as done and successful
+                        setTranslating(prevState => {
+                            const newState = [...prevState];
+                            newState[selectedLetterIndex] = {
+                                ...newState[selectedLetterIndex],
+                                done: true,
+                                success: true
+                            };
+                            return newState;
+                        });
+                    } else {
+                        // Wrong letter, mark as done but not successful
+                        setTranslating(prevState => {
+                            const newState = [...prevState];
+                            newState[selectedLetterIndex] = {
+                                ...newState[selectedLetterIndex],
+                                done: true,
+                                success: false
+                            };
+                            return newState;
+                        });
+                    }
                 }
             }, 500);
 
@@ -208,7 +252,20 @@ const Traduction = ({ setDisplayTutorial }: Props) => {
                 setIsGoodLetter(false);
             }
         }
-    }, [currentLetter]);
+    }, [currentLetter, isLearning, selectedLetterIndex, translating]);
+
+    // NEW useEffect to check for word completion whenever translating state changes
+    useEffect(() => {
+        if (isLearning && translating.length > 0) {
+            const allSuccessful = translating.every(letter => letter.success);
+            if (allSuccessful) {
+                setWordCompleted(true);
+                alert.success("Congratulations! You've mastered the word " + wordToTranslate);
+                setIsLearning(false);
+                setRunning(false);
+            }
+        }
+    }, [translating, wordToTranslate, isLearning, alert]);
 
     // Ce hook useEffect met à jour les lettres signées toutes les secondes.
     // Si une lettre a été signée il y a moins de 5 secondes, elle reste visible.
@@ -255,24 +312,56 @@ const Traduction = ({ setDisplayTutorial }: Props) => {
         setPictureURL(e.target.value)
     }
 
-    // Handle tutorial and CGU display
-    const handleShowTutorial = () => {
-        setShowCGU(false);
-        setDisplayTutorial(true);
-    };
+    const startLearning = () => {
+        if (!wordToTranslate) return;
+        
+        let state: Array<TranslatingState> = [];
+        const separatedLetters = wordToTranslate.split("");
+        
+        for (let letter of separatedLetters) {
+            state.push({
+                letter: letter.toUpperCase(),
+                done: false,
+                success: false
+            });
+        }
 
-    const handleShowCGU = () => {
-        setDisplayTutorial(false);
-        setShowCGU(true);
-    };
+        setTranslating(state);
+        setSelectedLetterIndex(-1);
+        setIsLearning(true);
+        setWordCompleted(false);
+        
+        // Set the first letter as selected to display its image
+        if (state.length > 0) {
+            setSelectedLetter(state[0].letter);
+            // Find and set the corresponding image
+            const firstLetterImage = imageList.find(img => img.alt === state[0].letter);
+            if (firstLetterImage) {
+                setPictureURL(firstLetterImage.src);
+            }
+        }
+    }
 
-    const handleCloseCGU = () => {
-        setShowCGU(false);
-    };
+    const generateRandomWords = () => {
+        const randomWord = Words[Math.floor(Math.random() * Words.length)].toUpperCase();
+        setWordToTranslate(randomWord);
+    }
+
+    const selectLetter = (index: number) => {
+        if (index >= 0 && index < translating.length) {
+            setSelectedLetterIndex(index);
+            setSelectedLetter(translating[index].letter);
+            
+            // Find and set the corresponding image
+            const letterImage = imageList.find(img => img.alt === `Lettre ${translating[index].letter}`);
+            if (letterImage) {
+                setPictureURL(letterImage.src);
+            }
+        }
+    }
 
     return (
         <div className="traduction-container">
-            {showCGU && <CGU onClose={handleCloseCGU} />}
 
             <video
                 ref={videoRef}
@@ -282,42 +371,59 @@ const Traduction = ({ setDisplayTutorial }: Props) => {
                 playsInline
                 onLoadedMetadata={onLoaded}
             />
-            <canvas ref={canvasRef} className="signlang_canvas" style={{ width: "15%", height: "auto" }} />
+            
+            <canvas ref={canvasRef} className="signlang_canvas" style={{ width: isPhone ? "1%" : "15%", height: "auto" }} />
 
-            <div className="controls" style={{
-
-            }}>
+            <div className="controls">
                 <div className="startDiv">
                     <button onClick={onToggle} disabled={!isReady || !recognizer} id="start-btn">
                         {running ? "Arrêter" : "Commencer"}
                     </button>
 
                 </div>
+                {running &&
                 <div style={{
                     position: "absolute",
                     top: 10,
                     right: 10,
-                    width: "15%",
-                    backgroundColor: "white",
-                    display: isPhone ? "none": "flex",
-                    flexDirection: "row",
+                    width: isPhone ? "25%" : "15%",
+                    display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: 0,
-                    
-                }}
-                    id="start-btn"
-                >
-                    <label className="switch">
-                        <input
-                            type="checkbox"
-                            checked={videoInput ? false : true}
-                            onChange={() => videoInput ? setVideoInput(null) : setVideoInput("/video/A2.mp4")}
-                        />
-                        <span className="slider round"></span>
-                    </label>
-                    <span>Mode {videoInput ? "Video" : "Webcam"}</span>
+                    padding: 0,                                        
+                }}>
+                    <input
+                        type="text"
+                        placeholder="Mot à traduire..."
+                        value={wordToTranslate}
+                        onChange={(e) => setWordToTranslate(e.target.value)}
+                        style={{
+                            width: "100%",
+                            padding: "8px",
+                            borderRadius: "4px",
+                            border: "1px solid #ccc"
+                        }}
+                    />
+
+                    <button 
+                        className="start-btn"
+                        onClick={() => generateRandomWords()}
+                        style={{marginTop: 10}}
+                    >
+                        Aléatoire
+                    </button>
+                   
+                    {wordToTranslate !== "" &&
+                    <button 
+                        className="start-btn"
+                        onClick={() => startLearning()}
+                        style={{marginTop: 10}}
+                    >
+                        Traduire
+                    </button>}
                 </div>
+                }
                 {running && (
                     <div className="info">
                         <div className="top" style={{
@@ -336,25 +442,21 @@ const Traduction = ({ setDisplayTutorial }: Props) => {
                                 </div>
                             );
                         })}
-
-                        
-
+                      
                             <div style={{
                                 position: "absolute",
-                                bottom: 10,
-                                right: "2%",
-                                width: isPhone ? "25%": "15%",
-                                borderRadius: 15,
-                                border: "1px solid black",
+                                bottom: isPhone ? "10%" : 10,
+                                right: 0,
+                                width: isPhone ? "45%" : "10%",
                                 display: "flex",
                                 flexDirection: "column",
                                 alignContent: "center",
                                 alignItems: "center",
 
                             }}>
-                                {pictureURL && <img style={{width: "100%"}} src={pictureURL} alt="Dictionnaire" onWheel={handleWheel} />}
+                                {pictureURL && <img src={pictureURL} alt="Dictionnaire" onWheel={handleWheel} />}
 
-                                <select style={{width: "100%"}} onChange={(e) => handlePictureChange(e)}>
+                                <select onChange={(e) => handlePictureChange(e)}>
                                     <option value="">-- Sélectionner --</option>
                                     {imageList.map((img: ImageList, index: number) => (
                                         <option key={img.src + index} value={img.src}>
@@ -365,28 +467,34 @@ const Traduction = ({ setDisplayTutorial }: Props) => {
 
                             </div>
                         
+
+                        {isLearning && translating.length > 0 && (
+                            <div className={!isPhone ? "learning-progress" : "learning-progress-phone"}>
+                                <h3>Progression: {translating.filter(item => item.success).length}/{translating.length}</h3>
+                                <div className="letter-progress">
+                                    {translating.map((item, index) => (
+                                        <div 
+                                            key={index} 
+                                            className={`letter-item ${item.done ? (item.success ? 'success' : 'failed') : ''} ${index === selectedLetterIndex ? 'current' : ''}`}
+                                            onClick={() => selectLetter(index)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            {item.letter}
+                                        </div>
+                                    ))}
+                                </div>
+                                {selectedLetterIndex === -1 && (
+                                    <p style={{ textAlign: 'center', marginTop: '10px' }}>
+                                        Cliquez sur une lettre pour commencer à la traduire
+                                    </p>
+                                )}
+                            </div>
+                        )}
                     </div>
                 )}
-
-                {/* Bottom left buttons */}
-                <div className="helpersDiv" style={{ display: running ? "none" : "block", textAlign: "end" }}>
-                    <button
-                        onClick={handleShowTutorial}
-                        className="start-btn"
-                    >
-                        ?
-                    </button>
-                    <br />
-                    <button
-                        onClick={handleShowCGU}
-                        className="start-btn"
-                    >
-                        CGU
-                    </button>
-                </div>
             </div>
         </div>
     );
-};
+}
 
-export default Traduction;
+export default LearningUI;
