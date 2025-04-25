@@ -13,6 +13,8 @@ SignIt est un traducteur de langue des signes capable de lire l'alphabet. Ce pro
 
 Une présentation du projet est disponible [ici (SiGN-IT.pdf)](./SIGN-IT.pdf).
 
+Un onboarding plus complet est disponible sur le wiki du répo.
+
 ## Fonctionnalités
 
 - Traduction de l'alphabet en langue des signes.
@@ -47,6 +49,13 @@ Une présentation du projet est disponible [ici (SiGN-IT.pdf)](./SIGN-IT.pdf).
    ```
 2. Ouvrez votre navigateur et accédez à `http://localhost:3000`.
 
+## Entrainement du modèle
+Le notebook d'entrainement du modèle est trouvable [ici](Doc&Model/Pôle%20IA/Code%20For%20Training%20the%20Model/SLR_MODEL_TRAINING.ipynb).
+
+Le dataset utilisé pour l'entrainement est trouvable [ici](https://drive.google.com/drive/folders/19k_i0nlB7AfjWk4IF7wGulKaRate4PJ-?usp=sharing). Pour votre entrainement, vous pouvez enrichir le dataset.
+
+Une dois le modèle entrainé, la dernière cellule du notebook déplace le modèle dans le site. Testez les performances du modèle en local avant de merge la branche.
+
 ## Contribution
 
 Avant de contribuer à ce projet nous vous conseillons de lire le OnBoarding Kit dans le wiki du repo !
@@ -61,4 +70,4 @@ Pour contribuer à ce projet, suivez ces étapes :
 
 ## Licence
 
-Ce projet est sous licence MIT.
+Ce projet est sous [licence MIT](LICENSE).

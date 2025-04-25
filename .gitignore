@@ -52,9 +52,12 @@ venv/
 
 # Ignorer le dataset
 Etat de l'art/Pôle IA/Code For Training the Model/DATASET_*
+Doc&Model/Pôle IA/Code For Training the Model/DATASET_*
 
 # Client secrets
 Etat de l'art/Pôle IA/Code For Training the Model/client_secrets.json
+Doc&Model/Pôle IA/Code For Training the Model/client_secrets.json
 
 # Ignorer le modèle exporté
 Etat de l'art/Pôle IA/Code For Training the Model/exported_model/
+Doc&Model/Pôle IA/Code For Training the Model/exported_model/
