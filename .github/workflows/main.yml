@@ -18,21 +18,21 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 10
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - name: Install Cypress Globally
-        run: npm install -g cypress  
+        run: npm install -g cypress
 
       - name: Cypress run
-        uses: cypress-io/github-action@v6          
-        env: 
-            CI: false
+        uses: cypress-io/github-action@v6
+        env:
+          CI: false
         with:
           working-directory: ./signit-interface
-          build: CI='' pnpm build
+          build: pnpm build
           start: pnpm start
           browser: chrome
