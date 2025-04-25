@@ -52,13 +52,13 @@ importers:
         version: 16.18.126
       '@types/react':
         specifier: ^18.0.0
-        version: 18.3.18
+        version: 18.3.20
       '@types/react-alert':
         specifier: ^7.0.6
         version: 7.0.6
       '@types/react-dom':
         specifier: ^18.0.0
-        version: 18.3.6(@types/react@18.3.20)
+        version: 18.3.5(@types/react@18.3.20)
       '@types/react-router-dom':
         specifier: ^5.3.3
         version: 5.3.3
@@ -1557,7 +1557,6 @@ packages:
 
   '@types/react-dom@18.3.5':
     resolution: {integrity: sha512-P4t6saawp+b/dFrUr2cvkVsfvPguwsxtH6dNIYRllMsefqFzkZk5UIjzyDOv5g1dXIPdG4Sp1yCR4Z6RCUsG/Q==}
-
     peerDependencies:
       '@types/react': ^18.0.0
 
@@ -7906,7 +7905,7 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.27.0
       '@testing-library/dom': 8.20.1
-      '@types/react-dom': 18.3.6(@types/react@18.3.20)
+      '@types/react-dom': 18.3.5(@types/react@18.3.20)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     transitivePeerDependencies:
@@ -8061,10 +8060,9 @@ snapshots:
 
   '@types/react-alert@7.0.6':
     dependencies:
-      '@types/react': 18.3.18
+      '@types/react': 18.3.20
 
-  '@types/react-dom@18.3.5(@types/react@18.3.18)':
-
+  '@types/react-dom@18.3.5(@types/react@18.3.20)':
     dependencies:
       '@types/react': 18.3.20
 
