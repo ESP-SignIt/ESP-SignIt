@@ -5,52 +5,22 @@ defaults:
   run:
     working-directory: ./signit-interface
 jobs:
-  install:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Cypress Build
-        run : pnpm run build
-
-      - name: Save build folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          if-no-files-found: error
-          path: ./signit-interface/build
-
   cypress-run:
     runs-on: ubuntu-24.04
-    needs: install
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
 
       - name: Install dependencies
-        run: pnpm install
-        working-directory: ./signit-interface
+        run: pnpm install 
 
       - name: Download the build folder
         uses: actions/download-artifact@v4
@@ -61,6 +31,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          project: ./signit-interface
+          working-directory: ./signit-interface
+          build: pnpm build
           start: pnpm start
           browser: chrome
